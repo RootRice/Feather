@@ -4,7 +4,8 @@ using UnityEngine;
 
 public static class ForceConstraint
 {
-    public enum Tag {FreezeGrav, FreezeMovementInput};
+    public enum OngoingTag {FreezeGrav, FreezeMovementInput};
+    public enum InitialTag {ResetForces};
 
 
 }

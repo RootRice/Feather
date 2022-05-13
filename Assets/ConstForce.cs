@@ -9,7 +9,9 @@ public class ConstForce : ScriptableObject
     [SerializeField] float[] xForce, yForce, zForce, durations;
     float[] x = new float[2], y = new float[2], z = new float[2];
     float t;
-    [SerializeField] ForceConstraint.Tag[] tags;
+
+    [SerializeField] ForceConstraint.OngoingTag[] ongoingEffects;
+    [SerializeField] ForceConstraint.InitialTag[] initialEffects;
 
     public ConstForce(float[] _x, float[] _y, float[] _z, float[] _ts)
     {
@@ -63,8 +65,8 @@ public class ConstForce : ScriptableObject
 
     
 
-    public ForceConstraint.Tag[] CheckConstraints()
+    public ForceConstraint.OngoingTag[] CheckConstraints()
     {
-        return tags;
+        return ongoingEffects;
     }
 }

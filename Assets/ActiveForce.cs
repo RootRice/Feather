@@ -5,12 +5,25 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ActiveForce", menuName = "Forces/ActiveForce", order = 1)]
 public class ActiveForce : ScriptableObject
 {
+    public struct InitParams
+    {
+        public InitParams(float _x, float _y, float _z, float _t)
+        {
+            x = _x;
+            y = _y;
+            z = _z;
+            t = _t;
+        }
+        public float x, y, z, t;
+    }
+
     [SerializeField] float[] xForce, yForce, zForce, durations;
     float[] x = new float[2], y = new float[2], z = new float[2], ts = new float[3];
     float t = 0;
     float maxT = 0;
 
-    [SerializeField] ForceConstraint.Tag[] tags;
+    [SerializeField] ForceConstraint.OngoingTag[] ongoingEffects;
+    [SerializeField] ForceConstraint.InitialTag[] initialEffects;
 
     public ActiveForce(float[] _x, float[] _y, float[] _z, float[] _ts)
     {
@@ -63,7 +76,26 @@ public class ActiveForce : ScriptableObject
         }
         t = 0;
     }
-
+    public void Initialise(InitParams initParams)
+    {
+        x = new float[2];
+        y = new float[2];
+        z = new float[2];
+        ts = new float[3];
+        for (int i = 0; i < ts.Length; i++)
+        {
+            x[Mathf.Min(x.Length - 1, i)] = xForce[Mathf.Min(x.Length - 1, i)] * initParams.x;
+            y[Mathf.Min(y.Length - 1, i)] = yForce[Mathf.Min(y.Length - 1, i)] * initParams.y;
+            z[Mathf.Min(z.Length - 1, i)] = zForce[Mathf.Min(z.Length - 1, i)] * initParams.z;
+            ts[Mathf.Min(ts.Length - 1, i)] = durations[Mathf.Min(ts.Length - 1, i)] * initParams.t;
+        }
+        maxT = 0;
+        foreach (float f in ts)
+        {
+            maxT = Mathf.Max(maxT, f);
+        }
+        t = 0;
+    }
     public bool ShouldTerminate()
     {
         bool r = t > maxT;
@@ -92,8 +124,13 @@ public class ActiveForce : ScriptableObject
         }
     }
 
-    public ForceConstraint.Tag[] CheckConstraints()
+    public ForceConstraint.OngoingTag[] CheckOngoingConstraints()
     {
-        return tags;
+        return ongoingEffects;
+    }
+
+    public ForceConstraint.InitialTag[] CheckInitialConstraints()
+    {
+        return initialEffects;
     }
 }
