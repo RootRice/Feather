@@ -105,7 +105,6 @@ public class ActiveForce : ScriptableObject
         }
         return r;
     }
-
     public Vector3 ApplyForce(float deltaTime)
     {
         t += deltaTime;
@@ -123,12 +122,10 @@ public class ActiveForce : ScriptableObject
             return r;
         }
     }
-
     public ForceConstraint.OngoingTag[] CheckOngoingConstraints()
     {
         return ongoingEffects;
     }
-
     public ForceConstraint.InitialTag[] CheckInitialConstraints()
     {
         return initialEffects;

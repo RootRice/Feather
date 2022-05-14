@@ -25,4 +25,5 @@ MonoBehaviour:
   - 0
   - 0.175
   - 0.4
-  tags: 00000000
+  ongoingEffects: 00000000
+  initialEffects: 00000000

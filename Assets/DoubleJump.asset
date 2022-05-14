@@ -12,8 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75fdaf70b86495347b7cda0f26ee2fd2, type: 3}
   m_Name: DoubleJump
   m_EditorClassIdentifier: 
-  xForce: []
-  yForce: []
-  zForce: []
-  durations: []
-  tags: 
+  xForce:
+  - 0
+  - 0
+  yForce:
+  - 5000
+  - -200
+  zForce:
+  - 0
+  - 0
+  durations:
+  - 0
+  - 0.25
+  - 0.4
+  ongoingEffects: 00000000
+  initialEffects: 00000000

@@ -9,21 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 214566d477b441e4daa5354b190e7491, type: 3}
-  m_Name: Gravity
+  m_Script: {fileID: 11500000, guid: b9e165392b679ed4faf42cc7a307c4d1, type: 3}
+  m_Name: DodgeAnimation
   m_EditorClassIdentifier: 
-  xForce:
+  xRotation:
+  - 90
   - 0
-  - 0
-  yForce:
-  - 0
-  - -9000
-  zForce:
+  yRotation:
+  - -45
+  - 45
+  zRotation:
   - 0
   - 0
   durations:
   - 1
-  - 1.2
-  - 1
-  ongoingEffects: 
-  initialEffects: 
+  - 0.25
+  - 0

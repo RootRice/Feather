@@ -7,12 +7,17 @@ public class PlayerController : MonoBehaviour
 {
     List<ActiveForce> playerForces = new List<ActiveForce>();
     List<ConstForce> constantForces = new List<ConstForce>();
+    List<Animation> animations = new List<Animation>();
 
-    [SerializeField] ActiveForce dodgeForce;
-    [SerializeField] ActiveForce jumpForce;
-    [SerializeField] ActiveForce doubleJumpForce;
+    [SerializeField] public ActiveForce dodgeForce;
+    [SerializeField] public ActiveForce jumpForce;
+    [SerializeField] public ActiveForce doubleJumpForce;
     [SerializeField] ConstForce gravity;
+    [SerializeField] public Animation dodgeAnimation;
+    [SerializeField] public Animation jumpAnimation;
 
+    ControlScheme currentControls = new GroundControls();
+    ControlScheme[] controls;
 
     Vector3 startPos;
 
@@ -21,9 +26,9 @@ public class PlayerController : MonoBehaviour
     Vector3 axis;
 
     public float maxSpeed;
-    public float accel;
+    public float speed;
 
-    bool[] constraints = new bool[3];
+    bool[] ongoingConstraints = new bool[Enum.GetValues(typeof(ForceConstraint.OngoingTag)).Length];
     bool grounded;
 
     delegate void ConstraintAction();
@@ -32,8 +37,7 @@ public class PlayerController : MonoBehaviour
     delegate void InitialAction();
     InitialAction[] initialAction;
 
-    bool rolling;
-    float rollingAngle = 0;
+    [SerializeField] Transform body;
     void CreateArr()
     {
         actionConstraint = new ConstraintAction[2];
@@ -45,6 +49,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        controls = new ControlScheme[Enum.GetValues(typeof(ControlScheme.ControlType)).Length];
+        controls[0] = new GroundControls();
+        controls[1] = new MidAirControls();
         CreateArr();
         startPos = transform.position;
         myRigidbody = GetComponent<Rigidbody>();
@@ -54,8 +61,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        GroundCheck();
         ApplyForces();
-
         Animate();
     }
 
@@ -66,9 +73,9 @@ public class PlayerController : MonoBehaviour
 
     void ResetConstraints()
     {
-        for(int i = 0; i < constraints.Length; i++)
+        for(int i = 0; i < ongoingConstraints.Length; i++)
         {
-            constraints[i] = false;
+            ongoingConstraints[i] = false;
         }
     }
 
@@ -91,13 +98,9 @@ public class PlayerController : MonoBehaviour
                 i--;
             }
         }
-        
-        grounded = GroundCheck();
+        myRigidbody.AddForce(gravity.ApplyForce(Time.fixedDeltaTime, grounded || ongoingConstraints[(int)ForceConstraint.OngoingTag.FreezeGrav]));
 
-        myRigidbody.AddForce(gravity.ApplyForce(Time.fixedDeltaTime, grounded || constraints[(int)ForceConstraint.OngoingTag.FreezeGrav]));
-
-
-        myRigidbody.AddForce(maxSpeed * axis* Time.fixedDeltaTime);
+        myRigidbody.AddForce(speed * axis* Time.fixedDeltaTime);
     }
 
     bool GroundCheck()
@@ -105,36 +108,47 @@ public class PlayerController : MonoBehaviour
         float sphereRadius = myCollider.radius;
         float cylinderHeight = myCollider.bounds.extents.y - sphereRadius + 0.1f;
         RaycastHit hit;
-        return Physics.SphereCast(myRigidbody.position, sphereRadius, Vector3.down, out hit,cylinderHeight);
+        if(Physics.SphereCast(myRigidbody.position, sphereRadius, Vector3.down, out hit,cylinderHeight))
+        {
+            grounded = true;
+            currentControls = controls[currentControls.ChangeControls((int)ControlScheme.ControlType.Grounded)];
+            return grounded;
+        }
+        grounded = false;
+        currentControls = controls[currentControls.ChangeControls((int)ControlScheme.ControlType.MidAir)];
+        return grounded;
     }
 
     void Controls()
     {
-        if (constraints[(int)ForceConstraint.OngoingTag.FreezeMovementInput])
+        if (ongoingConstraints[(int)ForceConstraint.OngoingTag.FreezeMovementInput])
             return;
 
-        axis.x = Input.GetAxisRaw("Horizontal");
-        axis.z = Input.GetAxisRaw("Vertical");
-        axis = Quaternion.AngleAxis(45, Vector3.up) * axis;
-        axis = axis.normalized;
+        if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) + Mathf.Abs(Input.GetAxisRaw("Vertical")) != 0)
+        {
+            axis.x = Input.GetAxisRaw("Horizontal");
+            axis.z = Input.GetAxisRaw("Vertical");
+            axis = Quaternion.AngleAxis(Camera.main.transform.rotation.eulerAngles.y, Vector3.up) * axis;
+            axis = axis.normalized;
+            speed = maxSpeed;
+        }
+        else
+        {
+            speed = 0;
+        }
+        
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            rolling = true;
-            AddActiveForce(doubleJumpForce);
-            startPos = transform.position;
+            currentControls.LBlock(this);
         }
-
-        if (!grounded)
-            return;
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            AddActiveForce(dodgeForce, new ActiveForce.InitParams(axis.x, axis.magnitude, axis.z, axis.magnitude));
+            currentControls.Dodge(this, new ActiveForce.InitParams(axis.x, axis.magnitude, axis.z, axis.magnitude));
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            AddActiveForce(jumpForce);
+            currentControls.Jump(this);
         }
         
     }
@@ -151,7 +165,7 @@ public class PlayerController : MonoBehaviour
 
     public void AddActiveForce(ActiveForce force, ActiveForce.InitParams initParams)
     {
-        foreach (ForceConstraint.InitialTag fc in force.CheckInitialConstraints())
+        foreach(ForceConstraint.InitialTag fc in force.CheckInitialConstraints())
         {
             initialAction[(int)fc]();
         }
@@ -159,19 +173,37 @@ public class PlayerController : MonoBehaviour
         playerForces.Add(force);
     }
 
+    public void AddAnimation(Animation anim)
+    {
+        anim.Initialise();
+        animations.Add(anim);
+    }
+
+    public void AddAnimation(Animation anim, Animation.InitParams initParams)
+    {
+        anim.Initialise(initParams);
+        animations.Add(anim);
+    }
+
     void Animate()
     {
-        if(rolling)
+        Quaternion animationRot = Quaternion.identity;
+        for(int i = 0; i < animations.Count; i++)
         {
-            rollingAngle += 1500 * Time.fixedDeltaTime;
-            transform.rotation = Quaternion.Euler(new Vector3(0f, rollingAngle, 0f));
-            if(rollingAngle > 360)
+            if(!animations[i].ShouldTerminate())
             {
-                rolling = false;
-                rollingAngle = 0;
-                transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+                animationRot *= animations[i].ApplyRotation(Time.fixedDeltaTime);
+            }
+            else
+            {
+                
+                animations.RemoveAt(i);
+                i--;
             }
         }
+
+        body.localRotation = animationRot;
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.AngleAxis(Vector3.SignedAngle(Vector3.forward, axis, Vector3.up), Vector3.up), 400f * Time.fixedDeltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -181,12 +213,12 @@ public class PlayerController : MonoBehaviour
 
     void ConstrainGravity()
     {
-        constraints[(int)ForceConstraint.OngoingTag.FreezeGrav] = true;
+        ongoingConstraints[(int)ForceConstraint.OngoingTag.FreezeGrav] = true;
     }
 
     void ConstrainMovementInput()
     {
-        constraints[(int)ForceConstraint.OngoingTag.FreezeMovementInput] = true;
+        ongoingConstraints[(int)ForceConstraint.OngoingTag.FreezeMovementInput] = true;
     }
 
     void ResetForces()
