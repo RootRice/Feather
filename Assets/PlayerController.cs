@@ -24,10 +24,12 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody myRigidbody;
     CapsuleCollider myCollider;
-    Vector3 axis;
+    Vector3 prevAxis = Vector3.forward;
+    Vector3 axis = Vector3.forward;
 
     public float maxSpeed;
     public float speed;
+    public float rotSpeed;
 
     bool[] ongoingConstraints = new bool[Enum.GetValues(typeof(Constraints.OngoingTag)).Length];
     bool grounded;
@@ -144,13 +146,18 @@ public class PlayerController : MonoBehaviour
 
     void Controls()
     {
-        
-        if(Mathf.Abs(Input.GetAxis("Horizontal")) + Mathf.Abs(Input.GetAxis("Vertical")) != 0)
+        Vector3 joystickAxis = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
+        if(Mathf.Abs(joystickAxis.x) + Mathf.Abs(joystickAxis.z) != 0)
         {
-            axis.x = Input.GetAxis("Horizontal");
-            axis.z = Input.GetAxis("Vertical");
+            
+            
+            prevAxis = axis;
+            axis.x = joystickAxis.x;
+            axis.z = joystickAxis.z;
             axis = Quaternion.AngleAxis(Camera.main.transform.rotation.eulerAngles.y, Vector3.up) * axis;
             axis = axis.normalized;
+            
+
             speed = maxSpeed;
             if (ongoingConstraints[(int)Constraints.OngoingTag.FreezeMovementInput])
             {
@@ -245,12 +252,27 @@ public class PlayerController : MonoBehaviour
         }
 
         body.localRotation = animationRot;
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.AngleAxis(Vector3.SignedAngle(Vector3.forward, axis, Vector3.up), Vector3.up), 400f * Time.fixedDeltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.AngleAxis(Vector3.SignedAngle(Vector3.forward, axis, Vector3.up), Vector3.up), rotSpeed * Time.fixedDeltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        transform.position = startPos;
+        Damage damage = other.GetComponent<Damage>();
+        if (damage != null)
+        {
+            if (blockingState.CompareStates(damage.myType))
+            {
+                damage.Blocked();
+            }
+            else
+            {
+                damage.Hit();
+            }
+        }
+        else
+        {
+            transform.position = startPos;
+        }
     }
 
     void ConstrainGravity()
@@ -274,5 +296,6 @@ public class PlayerController : MonoBehaviour
         //transform.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(Vector3.forward, axis, Vector3.up), Vector3.up);
         animations.Clear();
     }
+
 
 }

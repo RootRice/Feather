@@ -11,7 +11,7 @@ public class NeutralBlock : BlockState
         myState = State.None;
     }
 
-    public override bool CompareStates(DamageTypes.Type type)
+    public override bool CompareStates(Damage.Type type)
     {
         return false;
     }

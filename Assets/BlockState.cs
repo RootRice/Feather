@@ -19,7 +19,7 @@ public abstract class BlockState : Constraints
         t += deltaTime;
         return t > duration;
     }
-    public virtual bool CompareStates(DamageTypes.Type type)
+    public virtual bool CompareStates(Damage.Type type)
     {
         if((int)type == (int)myState)
         {
