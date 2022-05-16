@@ -20,7 +20,7 @@ public class Animation : ScriptableObject
     [SerializeField] float[] xRotation, yRotation, zRotation, durations;
     float[] x = new float[2], y = new float[2], z = new float[2], ts = new float[3];
     float maxT = 0, t = 0;
-
+    public float animationRate;
     public void Initialise(InitParams initParams)
     {
         x = new float[2];

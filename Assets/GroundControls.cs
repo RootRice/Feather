@@ -7,8 +7,9 @@ public class GroundControls : ControlScheme
 
     public void Dodge(PlayerController player, ActiveForce.InitParams initParams)
     {
-        player.AddAnimation(player.dodgeAnimation);
+        player.transform.position += new Vector3(0f, 0.1f, 0f);
         player.AddActiveForce(player.dodgeForce, initParams);
+        player.AddAnimation(player.dodgeAnimation);
     }
 
     public void Jump(PlayerController player)

@@ -45,11 +45,12 @@ public class PlayerController : MonoBehaviour
     Color[] colours = new Color[4] { Color.red, Color.blue, Color.green, Color.white };
     void CreateArr()
     {
-        actionConstraint = new ConstraintAction[2];
-        initialAction = new InitialAction[1];
+        actionConstraint = new ConstraintAction[Enum.GetValues(typeof(Constraints.OngoingTag)).Length];
+        initialAction = new InitialAction[Enum.GetValues(typeof(Constraints.InitialTag)).Length];
         actionConstraint[(int)Constraints.OngoingTag.FreezeGrav] = ConstrainGravity;
         actionConstraint[(int)Constraints.OngoingTag.FreezeMovementInput] = ConstrainMovementInput;
         initialAction[(int)Constraints.InitialTag.ResetForces] = ResetForces;
+        initialAction[(int)Constraints.InitialTag.ResetAnimations] = ResetAnimations;
     }
 
     void Start()
@@ -144,12 +145,10 @@ public class PlayerController : MonoBehaviour
     void Controls()
     {
         
-            
-
-        if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) + Mathf.Abs(Input.GetAxisRaw("Vertical")) != 0)
+        if(Mathf.Abs(Input.GetAxis("Horizontal")) + Mathf.Abs(Input.GetAxis("Vertical")) != 0)
         {
-            axis.x = Input.GetAxisRaw("Horizontal");
-            axis.z = Input.GetAxisRaw("Vertical");
+            axis.x = Input.GetAxis("Horizontal");
+            axis.z = Input.GetAxis("Vertical");
             axis = Quaternion.AngleAxis(Camera.main.transform.rotation.eulerAngles.y, Vector3.up) * axis;
             axis = axis.normalized;
             speed = maxSpeed;
@@ -174,11 +173,11 @@ public class PlayerController : MonoBehaviour
         {
             currentControls.RBlock(this);
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeDodgeInput])
         {
             currentControls.Dodge(this, new ActiveForce.InitParams(axis.x, axis.magnitude, axis.z, axis.magnitude));
         }
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeJumpInput])
         {
             currentControls.Jump(this);
         }
@@ -225,19 +224,21 @@ public class PlayerController : MonoBehaviour
         animations.Add(anim);
     }
 
-
     void Animate()
     {
-        Quaternion animationRot = Quaternion.identity;
+        Quaternion animationRot = Quaternion.RotateTowards(body.localRotation, Quaternion.identity, 400f * Time.fixedDeltaTime);
+        if(animations.Count > 0)
+        {
+            animationRot = body.localRotation;
+        }
         for(int i = 0; i < animations.Count; i++)
         {
             if(!animations[i].ShouldTerminate())
             {
-                animationRot *= animations[i].ApplyRotation(Time.fixedDeltaTime);
+                animationRot = Quaternion.RotateTowards(animationRot, animations[i].ApplyRotation(Time.fixedDeltaTime), animations[i].animationRate * Time.fixedDeltaTime);
             }
             else
             {
-                
                 animations.RemoveAt(i);
                 i--;
             }
@@ -266,6 +267,12 @@ public class PlayerController : MonoBehaviour
     {
         myRigidbody.velocity -= new Vector3(0f, myRigidbody.velocity.y, 0f);
         playerForces.Clear();
+    }
+
+    void ResetAnimations()
+    {
+        //transform.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(Vector3.forward, axis, Vector3.up), Vector3.up);
+        animations.Clear();
     }
 
 }

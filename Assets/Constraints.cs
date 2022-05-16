@@ -5,7 +5,7 @@ using UnityEngine;
 public interface Constraints
 {
     public enum OngoingTag {FreezeGrav, FreezeMovementInput, FreezeJumpInput, FreezeDodgeInput, FreezeBlockInput};
-    public enum InitialTag {ResetForces};
+    public enum InitialTag {ResetForces, ResetAnimations};
 
     public OngoingTag[] CheckOngoingConstraints();
     public InitialTag[] CheckInitialConstraints();

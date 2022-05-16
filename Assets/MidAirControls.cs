@@ -11,8 +11,8 @@ public class MidAirControls : ControlScheme
     {
         if (jumpCharge)
             return;
-        player.AddAnimation(player.dodgeAnimation);
         player.AddActiveForce(player.dodgeForce, initParams);
+        player.AddAnimation(player.dodgeAnimation);
         jumpCharge = true;
     }
 
@@ -29,9 +29,9 @@ public class MidAirControls : ControlScheme
     {
         if (blockCharge)
             return;
+        player.SetBlock(new OneBlock(0.3f));
         player.AddAnimation(player.jumpAnimation);
         player.AddActiveForce(player.doubleJumpForce);
-        player.SetBlock(new OneBlock(0.3f));
         blockCharge = true;
     }
 
@@ -44,9 +44,9 @@ public class MidAirControls : ControlScheme
     {
         if (blockCharge)
             return;
+        player.SetBlock(new TwoBlock(0.3f));
         player.AddAnimation(player.jumpAnimation);
         player.AddActiveForce(player.doubleJumpForce);
-        player.SetBlock(new TwoBlock(0.3f));
         blockCharge = true;
     }
     public int ChangeControls(int i)
