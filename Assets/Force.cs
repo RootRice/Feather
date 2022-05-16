@@ -12,6 +12,5 @@ public class Force : ScriptableObject
 
     public virtual Vector3 ApplyForce(float deltaTime) { return Vector3.zero; }
     public virtual Vector3 ApplyForce(float deltaTime, bool reset) { return Vector3.zero; }
-
-    public virtual ForceConstraint.OngoingTag[] CheckConstraints() { return null; }
+    public virtual Constraints.OngoingTag[] CheckConstraints() { return null; }
 }

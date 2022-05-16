@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ConstantForce", menuName = "Forces/ConstantForce", order = 1)]
-public class ConstForce : ScriptableObject
+public class ConstForce : ScriptableObject, Constraints
 {
 
     [SerializeField] float[] xForce, yForce, zForce, durations;
     float[] x = new float[2], y = new float[2], z = new float[2];
     float t;
 
-    [SerializeField] ForceConstraint.OngoingTag[] ongoingEffects;
-    [SerializeField] ForceConstraint.InitialTag[] initialEffects;
+    [SerializeField] Constraints.OngoingTag[] ongoingEffects;
+    [SerializeField] Constraints.InitialTag[] initialEffects;
 
     public ConstForce(float[] _x, float[] _y, float[] _z, float[] _ts)
     {
@@ -63,9 +63,12 @@ public class ConstForce : ScriptableObject
         return r;
     }
 
-    
+    public Constraints.InitialTag[] CheckInitialConstraints()
+    {
+        return initialEffects;
+    }
 
-    public ForceConstraint.OngoingTag[] CheckConstraints()
+    public Constraints.OngoingTag[] CheckOngoingConstraints()
     {
         return ongoingEffects;
     }

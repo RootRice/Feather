@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ActiveForce", menuName = "Forces/ActiveForce", order = 1)]
-public class ActiveForce : ScriptableObject
+public class ActiveForce : ScriptableObject, Constraints
 {
     public struct InitParams
     {
@@ -22,8 +22,8 @@ public class ActiveForce : ScriptableObject
     float t = 0;
     float maxT = 0;
 
-    [SerializeField] ForceConstraint.OngoingTag[] ongoingEffects;
-    [SerializeField] ForceConstraint.InitialTag[] initialEffects;
+    [SerializeField] Constraints.OngoingTag[] ongoingEffects;
+    [SerializeField] Constraints.InitialTag[] initialEffects;
 
     public ActiveForce(float[] _x, float[] _y, float[] _z, float[] _ts)
     {
@@ -122,11 +122,11 @@ public class ActiveForce : ScriptableObject
             return r;
         }
     }
-    public ForceConstraint.OngoingTag[] CheckOngoingConstraints()
+    public Constraints.OngoingTag[] CheckOngoingConstraints()
     {
         return ongoingEffects;
     }
-    public ForceConstraint.InitialTag[] CheckInitialConstraints()
+    public Constraints.InitialTag[] CheckInitialConstraints()
     {
         return initialEffects;
     }

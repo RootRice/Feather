@@ -6,6 +6,7 @@ public class MidAirControls : ControlScheme
 {
     bool jumpCharge = false;
     bool blockCharge = false;
+
     public void Dodge(PlayerController player, ActiveForce.InitParams initParams)
     {
         if (jumpCharge)
@@ -30,6 +31,7 @@ public class MidAirControls : ControlScheme
             return;
         player.AddAnimation(player.jumpAnimation);
         player.AddActiveForce(player.doubleJumpForce);
+        player.SetBlock(new OneBlock(0.3f));
         blockCharge = true;
     }
 
@@ -44,6 +46,7 @@ public class MidAirControls : ControlScheme
             return;
         player.AddAnimation(player.jumpAnimation);
         player.AddActiveForce(player.doubleJumpForce);
+        player.SetBlock(new TwoBlock(0.3f));
         blockCharge = true;
     }
     public int ChangeControls(int i)

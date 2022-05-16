@@ -19,7 +19,8 @@ public class PlayerController : MonoBehaviour
     ControlScheme currentControls = new GroundControls();
     ControlScheme[] controls;
 
-    Vector3 startPos;
+    BlockState blockingState = new NeutralBlock();
+
 
     Rigidbody myRigidbody;
     CapsuleCollider myCollider;
@@ -28,7 +29,7 @@ public class PlayerController : MonoBehaviour
     public float maxSpeed;
     public float speed;
 
-    bool[] ongoingConstraints = new bool[Enum.GetValues(typeof(ForceConstraint.OngoingTag)).Length];
+    bool[] ongoingConstraints = new bool[Enum.GetValues(typeof(Constraints.OngoingTag)).Length];
     bool grounded;
 
     delegate void ConstraintAction();
@@ -38,13 +39,17 @@ public class PlayerController : MonoBehaviour
     InitialAction[] initialAction;
 
     [SerializeField] Transform body;
+
+    Vector3 startPos;
+    MeshRenderer myRenderer;
+    Color[] colours = new Color[4] { Color.red, Color.blue, Color.green, Color.white };
     void CreateArr()
     {
         actionConstraint = new ConstraintAction[2];
         initialAction = new InitialAction[1];
-        actionConstraint[(int)ForceConstraint.OngoingTag.FreezeGrav] = ConstrainGravity;
-        actionConstraint[(int)ForceConstraint.OngoingTag.FreezeMovementInput] = ConstrainMovementInput;
-        initialAction[(int)ForceConstraint.InitialTag.ResetForces] = ResetForces;
+        actionConstraint[(int)Constraints.OngoingTag.FreezeGrav] = ConstrainGravity;
+        actionConstraint[(int)Constraints.OngoingTag.FreezeMovementInput] = ConstrainMovementInput;
+        initialAction[(int)Constraints.InitialTag.ResetForces] = ResetForces;
     }
 
     void Start()
@@ -57,10 +62,12 @@ public class PlayerController : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody>();
         myCollider = GetComponent<CapsuleCollider>();
         gravity.Initialise();
+        myRenderer = body.GetComponent<MeshRenderer>();
     }
 
     private void FixedUpdate()
     {
+        ResetConstraints();
         GroundCheck();
         ApplyForces();
         Animate();
@@ -69,6 +76,20 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Controls();
+        ApplyBlock();
+    }
+
+    void ApplyBlock()
+    {
+        if(blockingState.Progress(Time.deltaTime))
+        {
+            blockingState = new NeutralBlock();
+        }
+        myRenderer.material.color = colours[(int)blockingState.myState];
+        foreach (Constraints.OngoingTag t in blockingState.CheckOngoingConstraints())
+        {
+            ongoingConstraints[(int)t] = true;
+        }
     }
 
     void ResetConstraints()
@@ -81,15 +102,16 @@ public class PlayerController : MonoBehaviour
 
     void ApplyForces()
     {
-        ResetConstraints();
+        
         for (int i = 0; i < playerForces.Count; i++)
         {
             if (!playerForces[i].ShouldTerminate())
             {
                 myRigidbody.AddForce(playerForces[i].ApplyForce(Time.fixedDeltaTime));
-                foreach(ForceConstraint.OngoingTag t in playerForces[i].CheckOngoingConstraints())
+                foreach(Constraints.OngoingTag t in playerForces[i].CheckOngoingConstraints())
                 {
-                    actionConstraint[(int)t]();
+                    ongoingConstraints[(int)t] = true;
+                    //actionConstraint[(int)t]();
                 }
             }
             else
@@ -98,7 +120,7 @@ public class PlayerController : MonoBehaviour
                 i--;
             }
         }
-        myRigidbody.AddForce(gravity.ApplyForce(Time.fixedDeltaTime, grounded || ongoingConstraints[(int)ForceConstraint.OngoingTag.FreezeGrav]));
+        myRigidbody.AddForce(gravity.ApplyForce(Time.fixedDeltaTime, grounded || ongoingConstraints[(int)Constraints.OngoingTag.FreezeGrav]));
 
         myRigidbody.AddForce(speed * axis* Time.fixedDeltaTime);
     }
@@ -121,8 +143,8 @@ public class PlayerController : MonoBehaviour
 
     void Controls()
     {
-        if (ongoingConstraints[(int)ForceConstraint.OngoingTag.FreezeMovementInput])
-            return;
+        
+            
 
         if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) + Mathf.Abs(Input.GetAxisRaw("Vertical")) != 0)
         {
@@ -131,16 +153,26 @@ public class PlayerController : MonoBehaviour
             axis = Quaternion.AngleAxis(Camera.main.transform.rotation.eulerAngles.y, Vector3.up) * axis;
             axis = axis.normalized;
             speed = maxSpeed;
+            if (ongoingConstraints[(int)Constraints.OngoingTag.FreezeMovementInput])
+            {
+                speed = 0;
+            }
         }
         else
         {
             speed = 0;
         }
+
         
 
-        if (Input.GetKeyDown(KeyCode.Q))
+
+        if (Input.GetKeyDown(KeyCode.Q) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeBlockInput])
         {
             currentControls.LBlock(this);
+        }
+        if (Input.GetKeyDown(KeyCode.E) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeBlockInput])
+        {
+            currentControls.RBlock(this);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -155,7 +187,7 @@ public class PlayerController : MonoBehaviour
 
     public void AddActiveForce(ActiveForce force)
     {
-        foreach(ForceConstraint.InitialTag fc in force.CheckInitialConstraints())
+        foreach(Constraints.InitialTag fc in force.CheckInitialConstraints())
         {
             initialAction[(int)fc]();
         }
@@ -165,7 +197,7 @@ public class PlayerController : MonoBehaviour
 
     public void AddActiveForce(ActiveForce force, ActiveForce.InitParams initParams)
     {
-        foreach(ForceConstraint.InitialTag fc in force.CheckInitialConstraints())
+        foreach(Constraints.InitialTag fc in force.CheckInitialConstraints())
         {
             initialAction[(int)fc]();
         }
@@ -173,6 +205,14 @@ public class PlayerController : MonoBehaviour
         playerForces.Add(force);
     }
 
+    public void SetBlock(BlockState state)
+    {
+        foreach (Constraints.InitialTag fc in state.CheckInitialConstraints())
+        {
+            initialAction[(int)fc]();
+        }
+        blockingState = state;
+    }
     public void AddAnimation(Animation anim)
     {
         anim.Initialise();
@@ -184,6 +224,7 @@ public class PlayerController : MonoBehaviour
         anim.Initialise(initParams);
         animations.Add(anim);
     }
+
 
     void Animate()
     {
@@ -213,12 +254,12 @@ public class PlayerController : MonoBehaviour
 
     void ConstrainGravity()
     {
-        ongoingConstraints[(int)ForceConstraint.OngoingTag.FreezeGrav] = true;
+        ongoingConstraints[(int)Constraints.OngoingTag.FreezeGrav] = true;
     }
 
     void ConstrainMovementInput()
     {
-        ongoingConstraints[(int)ForceConstraint.OngoingTag.FreezeMovementInput] = true;
+        ongoingConstraints[(int)Constraints.OngoingTag.FreezeMovementInput] = true;
     }
 
     void ResetForces()
