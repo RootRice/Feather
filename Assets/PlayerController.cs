@@ -130,10 +130,10 @@ public class PlayerController : MonoBehaviour
 
     bool GroundCheck()
     {
-        float sphereRadius = myCollider.radius;
+        float sphereRadius = myCollider.radius *0.95f;
         float cylinderHeight = myCollider.bounds.extents.y - sphereRadius + 0.1f;
         RaycastHit hit;
-        if(Physics.SphereCast(myRigidbody.position, sphereRadius, Vector3.down, out hit,cylinderHeight))
+        if(Physics.SphereCast(myRigidbody.position, sphereRadius, Vector3.down, out hit,cylinderHeight, 2147483647, QueryTriggerInteraction.Ignore))
         {
             grounded = true;
             currentControls = controls[currentControls.ChangeControls((int)ControlScheme.ControlType.Grounded)];
@@ -257,6 +257,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!other.isTrigger)
+            return;
         Damage damage = other.GetComponent<Damage>();
         if (damage != null)
         {
