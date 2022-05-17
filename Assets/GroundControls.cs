@@ -34,4 +34,9 @@ public class GroundControls : ControlScheme
     {
         return i;
     }
+
+    public void SuccessfulBlock()
+    {
+        
+    }
 }

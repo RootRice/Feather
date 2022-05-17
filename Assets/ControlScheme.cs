@@ -14,4 +14,6 @@ public interface ControlScheme
     public abstract void Dodge(PlayerController player, ActiveForce.InitParams initParams);
     public abstract int ChangeControls(int i);
 
+    public abstract void SuccessfulBlock();
+
 }

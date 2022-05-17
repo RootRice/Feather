@@ -480,6 +480,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   g: {fileID: 3911060538466085293, guid: 8acde7403c4e8ea41b6872efafd628b9, type: 3}
+  spawnTime: 1
 --- !u!65 &173856746
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -551,7 +552,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 173856744}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.94, y: 0.94, z: -5.98}
+  m_LocalPosition: {x: 8.94, y: 7.17, z: -5.98}
   m_LocalScale: {x: 1, y: 4.13, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -945,7 +946,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followTarget: {fileID: 1076664926}
-  offset: {x: -10, y: 10, z: -10}
+  offset: {x: -15, y: 15, z: -15}
 --- !u!1 &1076664921
 GameObject:
   m_ObjectHideFlags: 0

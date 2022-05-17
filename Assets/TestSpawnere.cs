@@ -5,7 +5,9 @@ using UnityEngine;
 public class TestSpawnere : MonoBehaviour
 {
     [SerializeField] GameObject g;
+    [SerializeField] float spawnTime;
     float t;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +18,7 @@ public class TestSpawnere : MonoBehaviour
     void Update()
     {
         t += Time.deltaTime;
-        if(t > 2)
+        if(t > spawnTime)
         {
             t = 0;
             Instantiate(g, transform.position, Quaternion.identity);

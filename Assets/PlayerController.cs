@@ -265,6 +265,7 @@ public class PlayerController : MonoBehaviour
             if (blockingState.CompareStates(damage.myType))
             {
                 damage.Blocked();
+                currentControls.SuccessfulBlock();
             }
             else
             {

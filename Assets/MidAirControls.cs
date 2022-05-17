@@ -58,4 +58,9 @@ public class MidAirControls : ControlScheme
         }
         return i;
     }
+
+    public void SuccessfulBlock()
+    {
+        blockCharge = false;
+    }
 }
