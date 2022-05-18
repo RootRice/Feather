@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Rotation", menuName = "Animations/Rotation", order = 1)]
-public class Animation : ScriptableObject
+public class RotationAnimation : ScriptableObject
 {
     public struct InitParams
     {

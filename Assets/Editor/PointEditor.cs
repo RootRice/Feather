@@ -10,12 +10,14 @@ public class PointEditor : Editor
     [SerializeField, HideInInspector] IdlePathManager constructor;
     [SerializeField,HideInInspector] Points points;
     [SerializeField,HideInInspector] IdlePathManager.DrawType drawType;
-
+    bool showPath = false;
     delegate void DrawInstruction(Vector3[] vector3s);
     DrawInstruction drawInstructions;
     private void OnSceneGUI()
     {
-        if (points == null)
+        if ((points == null) )
+            return;
+        if (showPath)
             return;
         Draw();
         Input();
@@ -24,11 +26,25 @@ public class PointEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
+        GUIStyle headStyle = new GUIStyle(GUI.skin.label);
+        headStyle.fontSize = 15;
+        GUILayout.Label("Path options", headStyle);
+        GUILayout.BeginHorizontal();
+        if(GUILayout.Button("Show Path", new GUILayoutOption[] { GUILayout.Width(100f) }))
+        {
+            showPath = !showPath;
+            SceneView.RepaintAll();
 
-        if(GUILayout.Button("Create Path"))
+
+        }
+        GUILayout.Space(25f);
+        if (GUILayout.Button("Create Path", new GUILayoutOption[] { GUILayout.Width(100f) }))
         {
             Create();
+            SceneView.RepaintAll();
         }
+        GUILayout.EndHorizontal();
+
     }
 
     void Input()
@@ -51,7 +67,8 @@ public class PointEditor : Editor
     void Draw()
     {
         Handles.color = Color.red;
-        for(int i = 0; i < points.NumPoints(); i++)
+        Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
+        for (int i = 0; i < points.NumPoints(); i++)
         {
             Vector3 newPos = Handles.FreeMoveHandle(points.points[i], Quaternion.identity, 0.5f, Vector3.zero, Handles.CylinderHandleCap);
             if(points.points[i] != newPos)
@@ -65,7 +82,7 @@ public class PointEditor : Editor
 
     void Create()
     {
-        DrawInstruction[] instructions = new DrawInstruction[] { Lines, Box };
+        DrawInstruction[] instructions = new DrawInstruction[] { Lines, Bezier, Box };
         constructor.CreatePoints();
         points = constructor.GetPoints();
         drawInstructions = instructions[(int)constructor.drawType];
@@ -73,7 +90,7 @@ public class PointEditor : Editor
 
     private void OnEnable()
     {
-        DrawInstruction[] instructions = new DrawInstruction[] { Lines, Box };
+        DrawInstruction[] instructions = new DrawInstruction[] { Lines, Bezier, Box };
         constructor = (IdlePathManager)target;
         if (constructor.points != null)
         {
@@ -95,6 +112,11 @@ public class PointEditor : Editor
             Handles.DrawLine(boxPoints[i], boxPoints[i+1]);
         }
         Handles.DrawLine(boxPoints[boxPoints.Length - 1], boxPoints[0]);
+    }
+
+    void Bezier(Vector3[] vector3s)
+    {
+
     }
 
     void Lines(Vector3[] vector3s)

@@ -7,14 +7,14 @@ public class PlayerController : MonoBehaviour
 {
     List<ActiveForce> playerForces = new List<ActiveForce>();
     List<ConstForce> constantForces = new List<ConstForce>();
-    List<Animation> animations = new List<Animation>();
+    List<RotationAnimation> animations = new List<RotationAnimation>();
 
     [SerializeField] public ActiveForce dodgeForce;
     [SerializeField] public ActiveForce jumpForce;
     [SerializeField] public ActiveForce doubleJumpForce;
     [SerializeField] ConstForce gravity;
-    [SerializeField] public Animation dodgeAnimation;
-    [SerializeField] public Animation jumpAnimation;
+    [SerializeField] public RotationAnimation dodgeAnimation;
+    [SerializeField] public RotationAnimation jumpAnimation;
 
     ControlScheme currentControls = new GroundControls();
     ControlScheme[] controls;
@@ -219,13 +219,13 @@ public class PlayerController : MonoBehaviour
         }
         blockingState = state;
     }
-    public void AddAnimation(Animation anim)
+    public void AddAnimation(RotationAnimation anim)
     {
         anim.Initialise();
         animations.Add(anim);
     }
 
-    public void AddAnimation(Animation anim, Animation.InitParams initParams)
+    public void AddAnimation(RotationAnimation anim, RotationAnimation.InitParams initParams)
     {
         anim.Initialise(initParams);
         animations.Add(anim);

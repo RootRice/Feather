@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1173907664159964bbff9dc5d158ea22, type: 3}
-  m_Name: Wander
+  m_Script: {fileID: 11500000, guid: 8bbddc21988065840aa9939568fae884, type: 3}
+  m_Name: IdleState
   m_EditorClassIdentifier: 
-  speed: 0
-  drawType: 0
+  detectionRadius: 0

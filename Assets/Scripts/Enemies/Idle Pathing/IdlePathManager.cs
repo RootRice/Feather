@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class IdlePathManager : MonoBehaviour
 {
-    [SerializeField] MovementType movementType;
+    [SerializeField] IdleMovementType movementType;
+    [SerializeField] float speed;
     [HideInInspector] public Points points;
     [HideInInspector] public DrawType drawType;
-    public enum DrawType { Lines, Box}
+    public enum DrawType { Lines, Bezier, Box}
 
     private void Start()
     {
-        movementType.init(transform, points);
+        movementType.init(transform, points, speed);
     }
     public Vector3 GetNewPosition(float deltaTime)
     {
