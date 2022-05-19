@@ -8,12 +8,13 @@ public class IdleState : ScriptableObject, EnemyState
     Transform player;
     Transform myTransform;
     IdlePathManager pathing;
+    [SerializeField] float idleSpeed;
+
     public void InitValues(Transform _player, Transform _myTransform, IdlePathManager _pathing)
     {
         player = _player;
         myTransform = _myTransform;
         pathing = _pathing;
-        Debug.Log("Happens");
     }
     public float detectionRadius;
     public void EndState()
@@ -23,7 +24,7 @@ public class IdleState : ScriptableObject, EnemyState
 
     public void Init()
     {
-        throw new System.NotImplementedException();
+        pathing.speed = idleSpeed;
     }
 
     public void MainLoop(float deltaTime)

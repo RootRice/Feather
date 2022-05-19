@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bbddc21988065840aa9939568fae884, type: 3}
   m_Name: IdleState
   m_EditorClassIdentifier: 
-  detectionRadius: 0
+  idleSpeed: 0
+  detectionRadius: 10.514035

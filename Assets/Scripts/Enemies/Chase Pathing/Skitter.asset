@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1173907664159964bbff9dc5d158ea22, type: 3}
-  m_Name: Wander
+  m_Script: {fileID: 11500000, guid: 0a0a2d1043331e545a5d8075779b9302, type: 3}
+  m_Name: Skitter
   m_EditorClassIdentifier: 
-  drawType: 2
-  waitTime: 1
-  acceleration: 0.066
+  skitterFrequency: 1
+  acceleration: 0.126

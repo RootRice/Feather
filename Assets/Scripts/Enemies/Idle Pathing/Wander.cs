@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Wander", menuName = "MovementTypes/Wander", order = 1)]
+[CreateAssetMenu(fileName = "Wander", menuName = "MovementTypes/Idle/Wander", order = 1)]
 public class Wander : IdleMovementType
 {
     Vector3 targetPos = Vector3.zero;

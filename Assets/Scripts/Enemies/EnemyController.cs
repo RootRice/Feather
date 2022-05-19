@@ -15,24 +15,27 @@ public class EnemyController : MonoBehaviour
     EnemyState[] states;
     EnemyState currentState;
 
+    public ChasingState chaseState;
     public IdleState idleState;
     public void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         idlePathManager = GetComponent<IdlePathManager>();
         InitialiseStates();
-        states = new EnemyState[] { idleState };
-        
-        currentState = states[0];
+        states = new EnemyState[] { idleState, chaseState };
+        states[0].Init();
+        states[1].Init();
+        currentState = states[1];
     }
 
     void InitialiseStates()
     {
         idleState.InitValues(player, transform, idlePathManager);
+        chaseState.InitValues(player, transform);
     }
-    public void Update()
+    public void FixedUpdate()
     {
-        currentState.MainLoop(Time.deltaTime);
+        currentState.MainLoop(Time.fixedDeltaTime);
     }
 
 }

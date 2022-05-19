@@ -5,7 +5,7 @@ using UnityEngine;
 public class IdlePathManager : MonoBehaviour
 {
     [SerializeField] IdleMovementType movementType;
-    [SerializeField] float speed;
+    [HideInInspector] public float speed;
     [HideInInspector] public Points points;
     [HideInInspector] public DrawType drawType;
     public enum DrawType { Lines, Bezier, Box}

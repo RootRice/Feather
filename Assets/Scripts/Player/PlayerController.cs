@@ -172,11 +172,11 @@ public class PlayerController : MonoBehaviour
         
 
 
-        if (Input.GetKeyDown(KeyCode.Q) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeBlockInput])
+        if (Input.GetKeyDown(KeyCode.Period) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeBlockInput])
         {
             currentControls.LBlock(this);
         }
-        if (Input.GetKeyDown(KeyCode.E) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeBlockInput])
+        if (Input.GetKeyDown(KeyCode.Comma) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeBlockInput])
         {
             currentControls.RBlock(this);
         }
@@ -184,7 +184,7 @@ public class PlayerController : MonoBehaviour
         {
             currentControls.Dodge(this, new ActiveForce.InitParams(axis.x, axis.magnitude, axis.z, axis.magnitude));
         }
-        if (Input.GetKeyDown(KeyCode.Z) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeJumpInput])
+        if (Input.GetKeyDown(KeyCode.RightShift) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeJumpInput])
         {
             currentControls.Jump(this);
         }

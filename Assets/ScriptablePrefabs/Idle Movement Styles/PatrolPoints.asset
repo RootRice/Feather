@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba88a828c6a683e4bb60931d3b5ec6e3, type: 3}
   m_Name: PatrolPoints
   m_EditorClassIdentifier: 
-  speed: 500
-  acceleration: 1
   drawType: 0

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PatrolPoints", menuName = "MovementTypes/PatrolPoints", order = 1)]
+[CreateAssetMenu(fileName = "PatrolPoints", menuName = "MovementTypes/Idle/PatrolPoints", order = 1)]
 public class PatrolPoints : IdleMovementType
 {
     

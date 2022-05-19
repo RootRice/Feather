@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1173907664159964bbff9dc5d158ea22, type: 3}
-  m_Name: Wander
+  m_Script: {fileID: 11500000, guid: 566e549f21f56434a944eadf072c260f, type: 3}
+  m_Name: ChaseState
   m_EditorClassIdentifier: 
-  drawType: 2
-  waitTime: 1
-  acceleration: 0.066
+  chasingSpeed: 5
+  minDist: 2.7543063
+  maxDist: 7.015219
+  pathing: {fileID: 11400000, guid: 0d953eac81cfc0241bd554ced2ce581f, type: 2}
