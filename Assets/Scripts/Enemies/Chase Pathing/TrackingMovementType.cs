@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class TrackingMovementType : ScriptableObject
 {
-    protected float speed;
+    protected float maxSpeed;
     protected float tolerance;
     protected float minRadius;
     protected float maxRadius;
@@ -15,7 +15,7 @@ public abstract class TrackingMovementType : ScriptableObject
     {
         tolerance = 0.05f;
         t = _t;
-        speed = _s;
+        maxSpeed = _s;
         p = _p;
         minRadius = _min;
         maxRadius = _max;

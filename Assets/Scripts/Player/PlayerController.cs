@@ -259,17 +259,17 @@ public class PlayerController : MonoBehaviour
     {
         if (!other.isTrigger)
             return;
-        Damage damage = other.GetComponent<Damage>();
+        AttackTest damage = other.GetComponent<AttackTest>();
         if (damage != null)
         {
-            if (blockingState.CompareStates(damage.myType))
+            if (blockingState.CompareStates(damage.myDamage.myType))
             {
-                damage.Blocked();
+                damage.myDamage.Blocked();
                 currentControls.SuccessfulBlock();
             }
             else
             {
-                damage.Hit();
+                damage.myDamage.Hit();
             }
         }
         else

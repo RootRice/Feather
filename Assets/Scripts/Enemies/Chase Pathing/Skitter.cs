@@ -6,14 +6,20 @@ using UnityEngine;
 public class Skitter : TrackingMovementType
 {
     [SerializeField] float skitterFrequency;
-    [SerializeField] [Range(0, 1f)] float acceleration;
+    [SerializeField] [Range(1f, 3f)] float acceleration;
     float lastSkitterTime;
 
     Vector3 currentTargetNormalised;
     float currentDistance;
 
-    Vector3 lastPos;
+    float speed;
 
+    Vector3 lastPos;
+    Vector3 skitterTarget;
+
+    int i = 0;
+    int j = 0;
+    
     public override void init(Transform _t, Transform _p, float _s, float _min, float _max)
     {
         base.init(_t, _p, _s, _min, _max);
@@ -32,7 +38,10 @@ public class Skitter : TrackingMovementType
         else if(Time.timeSinceLevelLoad - lastSkitterTime > skitterFrequency)
             return GetNewSkitterTarget(deltaTime);
 
-        return EqualiseHeight(t.position, p.position.y);
+        AdjustSpeed(-deltaTime);
+        Vector3 currentTarget = p.position + currentTargetNormalised * currentDistance;
+
+        return Vector3.MoveTowards(t.position, EqualiseHeight(currentTarget, p.position.y), speed * deltaTime);
 
         
     }
@@ -48,47 +57,59 @@ public class Skitter : TrackingMovementType
 
     Vector3 GetNewSkitterTarget(float deltaTime)
     {
-        Vector3 currentTarget = EqualiseHeight(p.position + currentTargetNormalised * currentDistance, p.position.y);
+        Debug.Log("Skittering");
+        AdjustSpeed(deltaTime);
+        Vector3 currentTarget = p.position + currentTargetNormalised * currentDistance;
         Vector3 r = Vector3.MoveTowards(t.position, currentTarget, speed * deltaTime);
+        Debug.Log(r);
         if (Vector3.SqrMagnitude(r - currentTarget) < tolerance)
         {
+            speed = 0;
             lastSkitterTime = Time.timeSinceLevelLoad;
             lastPos = currentTarget;
-            currentTargetNormalised = Quaternion.Euler(0, Random.Range(-67f, 67f), 0) * currentTargetNormalised;
+            currentTargetNormalised = (EqualiseHeight(t.position, p.position.y) - p.position).normalized;
             currentDistance = Random.Range(minRadius, maxRadius);
-            if ((currentTargetNormalised *currentDistance).sqrMagnitude > maxRadius*maxRadius)
-            {
-                Debug.Log(currentDistance);
-                Debug.Log(currentTargetNormalised.normalized);
-                Debug.Log((currentTargetNormalised * currentDistance).sqrMagnitude);
-                Debug.Log(maxRadius * maxRadius);
-            }
-            currentTarget = currentTargetNormalised * currentDistance;
-            r = Vector3.MoveTowards(t.position, currentTarget, speed * deltaTime);
+            currentTargetNormalised = Quaternion.Euler(0, Random.Range(-67f, 67f), 0) * currentTargetNormalised;
+            skitterTarget = p.position + currentTargetNormalised * currentDistance;
+            r = Vector3.MoveTowards(t.position, skitterTarget, speed * deltaTime);
+            Debug.Log(r);
         }
         return r;
     }
 
     Vector3 Chase(float deltaTime)
     {
-        Debug.Log("c");
+        AdjustSpeed(deltaTime);
         currentDistance = Random.Range(minRadius, maxRadius);
         currentTargetNormalised = (EqualiseHeight(t.position, p.position.y) - p.position).normalized;
         Vector3 currentTarget = p.position + currentTargetNormalised * currentDistance;
+        ResetSkitter(currentTarget);
         return Vector3.MoveTowards(t.position, currentTarget, speed * deltaTime);
     }
 
     Vector3 Flee(float deltaTime)
     {
-
+        AdjustSpeed(deltaTime);
         currentTargetNormalised = (EqualiseHeight(t.position, p.position.y) - p.position).normalized;
         currentDistance = Random.Range(minRadius, maxRadius);
         Vector3 currentTarget = p.position + currentTargetNormalised * currentDistance;
+        ResetSkitter(currentTarget);
         return Vector3.MoveTowards(t.position, currentTarget, speed * deltaTime);
     }
 
     Vector3 EqualiseHeight(Vector3 v, float h)
     {
         return new Vector3(v.x, h, v.z);
+    }
+
+    void  ResetSkitter(Vector3 currentTarget)
+    {
+        skitterTarget = currentTarget;
+        lastSkitterTime = Time.timeSinceLevelLoad;
+    }
+
+    void AdjustSpeed(float deltaTime)
+    {
+        speed = Mathf.Clamp(speed + acceleration * deltaTime, 0.0f, maxSpeed);
     }
 }
