@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bbddc21988065840aa9939568fae884, type: 3}
   m_Name: IdleState
   m_EditorClassIdentifier: 
-  idleSpeed: 0
+  movementType: {fileID: 11400000, guid: 6082860cdf2ab2c4f8ef4a726ab31936, type: 2}
+  idleSpeed: 500
+  idleRotSpeed: 100
   detectionRadius: 10.514035

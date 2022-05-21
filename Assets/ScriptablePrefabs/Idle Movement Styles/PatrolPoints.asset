@@ -12,4 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba88a828c6a683e4bb60931d3b5ec6e3, type: 3}
   m_Name: PatrolPoints
   m_EditorClassIdentifier: 
+  speed: 500
+  rotSpeed: 100
+  patrol:
+    points:
+    - {x: -4.81, y: 2.72, z: -7.14}
+    - {x: 7.3051224, y: 2.3439865, z: -6.706216}
+    - {x: 7.8161464, y: 2.7199993, z: 1.4392796}
+    - {x: -4.3543606, y: 2.2626877, z: 2.270237}
+  transform: {fileID: 0}
   drawType: 0
+  turnDist: 1.58

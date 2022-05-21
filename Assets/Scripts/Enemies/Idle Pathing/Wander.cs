@@ -15,10 +15,10 @@ public class Wander : IdleMovementType
         
     }
 
-    public override Vector3 GetTargetPosition(float deltaTime)
+    public override void RequestMove(float deltaTime)
     {
-        if (Time.timeSinceLevelLoad-elapsedTime < waitTime)
-            return transform.position;
+        if (Time.timeSinceLevelLoad - elapsedTime < waitTime)
+            return;
         float tempSpeed = GetDistanceFromMiddle01(targetPos, prevPoint, transform.position) * speed;
         Vector3 r = Vector3.MoveTowards(transform.position, targetPos, tempSpeed * deltaTime);
         if (Vector3.SqrMagnitude(r - targetPos) < tolerance)
@@ -30,12 +30,11 @@ public class Wander : IdleMovementType
             tempSpeed = GetDistanceFromMiddle01(targetPos, prevPoint, transform.position) * speed;
             r = Vector3.MoveTowards(transform.position, targetPos, tempSpeed * deltaTime);
         }
-        return r;
     }
 
-    public override void init(Transform _t, Points _p, float _s, float _rs)
+    public override void init(Transform _t, float _s, float _rs)
     {
-        base.init(_t, _p, _s, _rs);
+        base.init(_t, _s, _rs);
         drawType = DrawType.Box;
         prevPoint = transform.position-Vector3.back;
         targetPos = transform.position;

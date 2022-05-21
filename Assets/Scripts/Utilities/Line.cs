@@ -52,6 +52,7 @@ public struct Line
 
     public void RecalculateLine(Vector2 pointOnLine, Vector2 pointPerpendicularToLine)
     {
+        Debug.Log("request");
         float dx = pointOnLine.x - pointPerpendicularToLine.x;
         float dy = pointOnLine.y - pointPerpendicularToLine.y;
 

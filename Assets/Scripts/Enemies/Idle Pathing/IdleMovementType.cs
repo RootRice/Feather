@@ -15,11 +15,10 @@ public abstract class IdleMovementType : ScriptableObject
     [HideInInspector]public DrawType drawType;
     public float turnDist;
 
-    public virtual void init(Transform _transform, Points _patrol, float _speed, float _rotSpeed)
+    public virtual void init(Transform _transform, float _speed, float _rotSpeed)
     {
         tolerance = 0.05f;
         transform = _transform;
-        patrol = _patrol;
         speed = _speed;
         rotSpeed = _rotSpeed;
         lines = new Line[patrol.NumPoints()];
@@ -33,7 +32,7 @@ public abstract class IdleMovementType : ScriptableObject
             lines[i] = new Line(turnBoundaryPoint, prevPoint);
         }
     }
-    public abstract Vector3 GetTargetPosition(float deltaTime);
+    public abstract void RequestMove(float deltaTime);
     public abstract void RemovePoint(Points p, int i);
     public abstract void AddPoint(Points p, Vector3 position);
 }

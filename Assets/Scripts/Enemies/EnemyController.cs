@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour
         states = new EnemyState[] { idleState, chaseState };
         states[0].Init();
         states[1].Init();
-        currentState = states[1];
+        currentState = states[0];
     }
 
     void InitialiseStates()

@@ -24,12 +24,12 @@ public class IdleState : ScriptableObject, EnemyState
 
     public void Init()
     {
-        
+        movementType.init(myTransform, idleSpeed, idleRotSpeed);
     }
 
     public void MainLoop(float deltaTime)
     {
-        myTransform.position = movementType.GetTargetPosition(deltaTime);
+        movementType.RequestMove(deltaTime);
         if(detectionRadius*detectionRadius > Vector3.SqrMagnitude(myTransform.position - player.position))
         {
 

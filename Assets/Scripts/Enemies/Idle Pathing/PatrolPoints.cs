@@ -7,11 +7,19 @@ public class PatrolPoints : IdleMovementType
 {
     
     int targetIndex = 0;
-    
-    public override Vector3 GetTargetPosition(float deltaTime)
+    GameObject DEBUG;
+    public override void RequestMove(float deltaTime)
     {
-        //transform.rotation = Quaternion.RotateTowards()
-        return Vector3.zero;
+        Vector3 position = transform.position;
+        Vector3 forward = transform.forward;
+        Vector3 dir = (patrol.points[targetIndex] - position).normalized;
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * deltaTime);
+        rigidbody.AddForce(forward * speed * deltaTime * Mathf.Max(Vector3.Dot(dir, forward), 0.8f));
+        DEBUG.transform.position = patrol.points[targetIndex];
+        if (lines[targetIndex].HasCrossedLine(Utils.V3ToV2(position)))
+        {
+            targetIndex = Utils.LoopIndex(targetIndex + 1, lines.Length);
+        }
     }
 
 
@@ -27,10 +35,12 @@ public class PatrolPoints : IdleMovementType
     }
 
 
-    public override void init(Transform _t, Points _p, float _s, float _rs)
+    public override void init(Transform _t, float _s, float _rs)
     {
-        base.init(_t, _p, _s, _rs);
+        base.init(_t, _s, _rs);
         drawType = DrawType.Lines;
+        targetIndex = 0;
+        DEBUG = GameObject.Find("DebugCube");
     }
 
 
