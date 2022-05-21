@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Skitter
   m_EditorClassIdentifier: 
   skitterFrequency: 2
-  acceleration: 3
+  acceleration: 750
+  skitterLength: 49.8
+  rotationSpeed: 500

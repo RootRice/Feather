@@ -4,19 +4,34 @@ using UnityEngine;
 
 
 public abstract class IdleMovementType : ScriptableObject
-{
-    protected float speed;
+{    public enum DrawType { Lines, Bezier, Box }
+    public float speed;
+    public float rotSpeed;
     protected float tolerance;
-    protected Points p;
-    protected Transform t;
-    [HideInInspector]public IdlePathManager.DrawType drawType;
+    [HideInInspector] public Points patrol;
+    [HideInInspector] public Line[] lines;
+    [HideInInspector] public Transform transform;
+    protected Rigidbody rigidbody;
+    [HideInInspector]public DrawType drawType;
+    public float turnDist;
 
-    public virtual void init(Transform _t, Points _p, float _s)
+    public virtual void init(Transform _transform, Points _patrol, float _speed, float _rotSpeed)
     {
         tolerance = 0.05f;
-        t = _t;
-        p = _p;
-        speed = _s;
+        transform = _transform;
+        patrol = _patrol;
+        speed = _speed;
+        rotSpeed = _rotSpeed;
+        lines = new Line[patrol.NumPoints()];
+        rigidbody = transform.GetComponent<Rigidbody>();
+        for(int i = 0; i < lines.Length; i++)
+        {
+            Vector2 currentPoint = Utils.V3ToV2(patrol.points[i]);
+            Vector2 prevPoint = Utils.V3ToV2(patrol.points[Utils.LoopIndex(i - 1, lines.Length)]);
+            Vector2 dirToCurrentPoint = (currentPoint - prevPoint).normalized;
+            Vector2 turnBoundaryPoint = currentPoint - dirToCurrentPoint * turnDist;
+            lines[i] = new Line(turnBoundaryPoint, prevPoint);
+        }
     }
     public abstract Vector3 GetTargetPosition(float deltaTime);
     public abstract void RemovePoint(Points p, int i);

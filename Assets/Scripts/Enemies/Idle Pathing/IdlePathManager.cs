@@ -6,13 +6,12 @@ public class IdlePathManager : MonoBehaviour
 {
     [SerializeField] IdleMovementType movementType;
     [HideInInspector] public float speed;
+    [HideInInspector] public float rotSpeed;
     [HideInInspector] public Points points;
-    [HideInInspector] public DrawType drawType;
-    public enum DrawType { Lines, Bezier, Box}
 
     private void Start()
     {
-        movementType.init(transform, points, speed);
+        movementType.init(transform, points, speed, rotSpeed);
     }
     public Vector3 GetNewPosition(float deltaTime)
     {
@@ -22,7 +21,6 @@ public class IdlePathManager : MonoBehaviour
     public void CreatePoints()
     {
         points = new Points(transform);
-        drawType = movementType.drawType;
     }
 
     public void AddPoint(Vector3 position)

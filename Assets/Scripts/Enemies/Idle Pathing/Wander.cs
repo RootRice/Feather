@@ -18,27 +18,27 @@ public class Wander : IdleMovementType
     public override Vector3 GetTargetPosition(float deltaTime)
     {
         if (Time.timeSinceLevelLoad-elapsedTime < waitTime)
-            return t.position;
-        float tempSpeed = GetDistanceFromMiddle01(targetPos, prevPoint, t.position) * speed;
-        Vector3 r = Vector3.MoveTowards(t.position, targetPos, tempSpeed * deltaTime);
+            return transform.position;
+        float tempSpeed = GetDistanceFromMiddle01(targetPos, prevPoint, transform.position) * speed;
+        Vector3 r = Vector3.MoveTowards(transform.position, targetPos, tempSpeed * deltaTime);
         if (Vector3.SqrMagnitude(r - targetPos) < tolerance)
         {
             elapsedTime = Time.timeSinceLevelLoad;
             Vector3 rand = new Vector3(Random.Range(0.0f, 1.0f), 1, Random.Range(0.0f, 1.0f));
             prevPoint = targetPos;
-            targetPos = p.points[0] + Vector3.Scale((p.points[1]-p.points[0]), rand);
-            tempSpeed = GetDistanceFromMiddle01(targetPos, prevPoint, t.position) * speed;
-            r = Vector3.MoveTowards(t.position, targetPos, tempSpeed * deltaTime);
+            targetPos = patrol.points[0] + Vector3.Scale((patrol.points[1]-patrol.points[0]), rand);
+            tempSpeed = GetDistanceFromMiddle01(targetPos, prevPoint, transform.position) * speed;
+            r = Vector3.MoveTowards(transform.position, targetPos, tempSpeed * deltaTime);
         }
         return r;
     }
 
-    public override void init(Transform _t, Points _p, float _s)
+    public override void init(Transform _t, Points _p, float _s, float _rs)
     {
-        base.init(_t, _p, _s);
-        drawType = IdlePathManager.DrawType.Box;
-        prevPoint = t.position-Vector3.back;
-        targetPos = t.position;
+        base.init(_t, _p, _s, _rs);
+        drawType = DrawType.Box;
+        prevPoint = transform.position-Vector3.back;
+        targetPos = transform.position;
         elapsedTime = 0;
     }
 
@@ -52,7 +52,7 @@ public class Wander : IdleMovementType
     {
         Vector3 maxDistFromMiddle = (b - a) / 2;
         Vector3 middle = a + maxDistFromMiddle;
-        float distModifier = (Vector3.SqrMagnitude(maxDistFromMiddle) / Vector3.SqrMagnitude((p.points[1] - p.points[0])/2));
+        float distModifier = (Vector3.SqrMagnitude(maxDistFromMiddle) / Vector3.SqrMagnitude((patrol.points[1] - patrol.points[0])/2));
         Debug.Log(distModifier);
         return Mathf.Max((1 - Vector3.SqrMagnitude(pos - middle) / Vector3.SqrMagnitude(maxDistFromMiddle)) * distModifier, acceleration*(1-distModifier));
     }
