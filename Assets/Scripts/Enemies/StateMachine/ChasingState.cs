@@ -28,7 +28,7 @@ public class ChasingState : ScriptableObject, EnemyState
 
     public void MainLoop(float deltaTime)
     {
-        myTransform.position = pathing.GetTargetPosition(deltaTime);
+        pathing.RequestMove(deltaTime);
     }
 
 }

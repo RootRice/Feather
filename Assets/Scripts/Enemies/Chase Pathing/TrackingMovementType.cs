@@ -8,17 +8,17 @@ public abstract class TrackingMovementType : ScriptableObject
     protected float tolerance;
     protected float minRadius;
     protected float maxRadius;
-    protected Transform t;
-    protected Transform p;
+    protected Transform transform;
+    protected Transform player;
 
-    public virtual void init(Transform _t, Transform _p, float _s, float _min, float _max)
+    public virtual void init(Transform _transform, Transform _player, float _speed, float _minRadius, float _maxRadius)
     {
         tolerance = 0.05f;
-        t = _t;
-        maxSpeed = _s;
-        p = _p;
-        minRadius = _min;
-        maxRadius = _max;
+        transform = _transform;
+        maxSpeed = _speed;
+        player = _player;
+        minRadius = _minRadius;
+        maxRadius = _maxRadius;
     }
-    public abstract Vector3 GetTargetPosition(float deltaTime);
+    public abstract Vector3 RequestMove(float deltaTime);
 }

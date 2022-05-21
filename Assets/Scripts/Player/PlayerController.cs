@@ -176,19 +176,23 @@ public class PlayerController : MonoBehaviour
         {
             currentControls.LBlock(this);
         }
-        if (Input.GetKeyDown(KeyCode.Comma) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeBlockInput])
+        if (Input.GetKeyDown(KeyCode.Slash) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeBlockInput])
         {
             currentControls.RBlock(this);
         }
-        if (Input.GetKeyDown(KeyCode.Space) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeDodgeInput])
+        if (Input.GetKeyDown(KeyCode.RightShift) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeDodgeInput])
         {
             currentControls.Dodge(this, new ActiveForce.InitParams(axis.x, axis.magnitude, axis.z, axis.magnitude));
         }
-        if (Input.GetKeyDown(KeyCode.RightShift) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeJumpInput])
+        if (Input.GetKeyDown(KeyCode.Space) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeJumpInput])
         {
             currentControls.Jump(this);
         }
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
     }
 
     public void AddActiveForce(ActiveForce force)
