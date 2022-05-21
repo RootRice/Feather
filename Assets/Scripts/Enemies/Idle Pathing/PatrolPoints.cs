@@ -10,13 +10,8 @@ public class PatrolPoints : IdleMovementType
     
     public override Vector3 GetTargetPosition(float deltaTime)
     {
-        Vector3 r = Vector3.MoveTowards(t.position, p.points[targetIndex], speed * deltaTime);
-        if (Vector3.SqrMagnitude(r - p.points[targetIndex]) < tolerance)
-        {
-            targetIndex = Utils.LoopIndex(targetIndex+1, p.points.Count);
-            r = Vector3.MoveTowards(t.position, p.points[targetIndex], speed * deltaTime);
-        }
-        return r;
+        //transform.rotation = Quaternion.RotateTowards()
+        return Vector3.zero;
     }
 
 
@@ -32,10 +27,10 @@ public class PatrolPoints : IdleMovementType
     }
 
 
-    public override void init(Transform _t, Points _p, float _s)
+    public override void init(Transform _t, Points _p, float _s, float _rs)
     {
-        base.init(_t, _p, _s);
-        drawType = IdlePathManager.DrawType.Lines;
+        base.init(_t, _p, _s, _rs);
+        drawType = DrawType.Lines;
     }
 
 
