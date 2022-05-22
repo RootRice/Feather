@@ -6,10 +6,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     Transform player;
-
-    Transform target = null;
     [SerializeField] Transform body;
-    Vector3 pos;
 
     EnemyState[] states;
     EnemyState currentState;
@@ -23,7 +20,7 @@ public class EnemyController : MonoBehaviour
         states = new EnemyState[] { idleState, chaseState };
         states[0].Init();
         states[1].Init();
-        currentState = states[0];
+        currentState = states[1];
     }
 
     void InitialiseStates()

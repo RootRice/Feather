@@ -9,12 +9,10 @@ public class Skitter : TrackingMovementType
     float lastSkitterTime;
 
     Rigidbody rigidbody;
-    [SerializeField] float acceleration;
     [SerializeField][Range(10.0f, 85.0f)] float skitterLength;
-    [SerializeField] float rotationSpeed;
 
-
-    delegate Vector3 ChaseProtocol(float deltaTime);
+    [SerializeField] [Range(0.0f, 1.5f)] float driftFactor;
+    delegate void ChaseProtocol(float deltaTime);
     ChaseProtocol[] chaseProtocols;
     int currentProtocol = 0;
 
@@ -22,9 +20,9 @@ public class Skitter : TrackingMovementType
     Line boundary;
     GameObject DEBUG;
 
-    public override void init(Transform _transform, Transform _player, float _speed, float _minRadius, float _maxRadius)
+    public override void init(Transform _transform, Transform _player, float _speed, float _rotSpeed, float _minRadius, float _maxRadius)
     {
-        base.init(_transform, _player, _speed, _minRadius, _maxRadius);
+        base.init(_transform, _player, _speed, _rotSpeed, _minRadius, _maxRadius);
 
         rigidbody = transform.GetComponent<Rigidbody>();
 
@@ -37,10 +35,10 @@ public class Skitter : TrackingMovementType
         boundary = new Line(Vector2.zero, Vector2.zero);
     }
 
-    public override Vector3 RequestMove(float deltaTime)
+    public override void RequestMove(float deltaTime)
     {
         CheckProtocol();
-        return chaseProtocols[currentProtocol](deltaTime);
+        chaseProtocols[currentProtocol](deltaTime);
     }
 
 
@@ -56,39 +54,35 @@ public class Skitter : TrackingMovementType
 
 
 
-    Vector3 SkitterMove(float deltaTime)
+    void SkitterMove(float deltaTime)
     {
         lastSkitterTime = Time.timeSinceLevelLoad;
         Vector3 dir = (target - transform.position).normalized;
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir), rotationSpeed * deltaTime);
-        rigidbody.AddForce(transform.forward * acceleration * deltaTime * Mathf.Max(Vector3.Dot(dir, transform.forward), 0));
-        return Vector3.zero;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * deltaTime);
+        rigidbody.AddForce(transform.forward * maxSpeed * deltaTime * Mathf.Max(Vector3.Dot(dir, transform.forward), 0));
     }
 
-    Vector3 ChaseMove(float deltaTime)
+    void ChaseMove(float deltaTime)
     {
         lastSkitterTime = Time.timeSinceLevelLoad;
         Vector3 dir = (player.position - transform.position).normalized;
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir), rotationSpeed * deltaTime);
-        rigidbody.AddForce(transform.forward * acceleration * deltaTime * Mathf.Max(Vector3.Dot(dir, transform.forward), 0));
-        return Vector3.zero;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * deltaTime);
+        rigidbody.AddForce(transform.forward * maxSpeed * deltaTime * Mathf.Max(Vector3.Dot(dir, transform.forward), 0));
     }
 
-    Vector3 FleeMove(float deltaTime)
+    void FleeMove(float deltaTime)
     {
         lastSkitterTime = Time.timeSinceLevelLoad;
         Vector3 dir = (player.position - transform.position).normalized;
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir), rotationSpeed * deltaTime);
-        rigidbody.AddForce(transform.forward * acceleration * deltaTime * Mathf.Min(Vector3.Dot(dir, -transform.forward), 0));
-        return Vector3.zero;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * deltaTime);
+        rigidbody.AddForce(transform.forward * maxSpeed * deltaTime * Mathf.Min(Vector3.Dot(dir, -transform.forward), 0));
     }
 
 
-    Vector3 Idle(float deltaTime)
+    void Idle(float deltaTime)
     {
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(player.position - transform.position), rotationSpeed * deltaTime);
-        rigidbody.AddForce(-(SetHeightToPlayer(target) - SetHeightToPlayer(transform.position)).normalized);
-        return Vector3.zero;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(player.position - transform.position), rotSpeed * deltaTime);
+        rigidbody.AddForce(-(SetHeightToPlayer(target) - SetHeightToPlayer(transform.position)).normalized*driftFactor);
 
     }
 
@@ -102,12 +96,12 @@ public class Skitter : TrackingMovementType
         }
         else if (Vector3.SqrMagnitude(SetHeightToPlayer(transform.position) - player.position) > maxRadius * maxRadius)
         {
-            SetTarget(0, Random.Range(minRadius + 1.5f, maxRadius - 1.5f));
+            SetTarget(0, maxRadius);
             currentProtocol = ChangeProtocol(1);
         }
         else if (Vector3.SqrMagnitude(SetHeightToPlayer(transform.position) - player.position) < minRadius * minRadius)
         {
-            SetTarget(0, Random.Range(minRadius + 1.5f, maxRadius - 1.5f));
+            SetTarget(0, minRadius);
             currentProtocol = ChangeProtocol(2);
         }
         else if(boundary.HasCrossedLine(Utils.V3ToV2(transform.position)))
