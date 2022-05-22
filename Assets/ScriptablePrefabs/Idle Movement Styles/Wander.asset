@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1173907664159964bbff9dc5d158ea22, type: 3}
   m_Name: Wander
   m_EditorClassIdentifier: 
+  speed: 500
+  rotSpeed: 5
+  patrol:
+    points:
+    - {x: -8.166108, y: 2.72, z: -9.155573}
+    - {x: 6.988702, y: 2.72, z: 4.338581}
+  transform: {fileID: 0}
   drawType: 2
+  turnDist: 0
   waitTime: 1
-  acceleration: 0.066

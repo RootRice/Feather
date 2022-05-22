@@ -91,6 +91,10 @@ public class EnemyBehaviourVisualiser : Editor
             points = constructor.patrol;
             drawInstructions = instructions[(int)constructor.drawType];
         }
+        else
+        {
+            constructor.patrol = new Points(manager.transform);
+        }
     }
 
     void Draw()
@@ -104,6 +108,7 @@ public class EnemyBehaviourVisualiser : Editor
         for (int i = 0; i < points.NumPoints(); i++)
         {
             Vector3 newPos = Handles.FreeMoveHandle(points.points[i], Quaternion.identity, 0.5f, Vector3.zero, Handles.CylinderHandleCap);
+            newPos = new Vector3(newPos.x, manager.transform.position.y, newPos.z);
             if (points.points[i] != newPos)
             {
                 Undo.RecordObject(constructor, "Move Point");

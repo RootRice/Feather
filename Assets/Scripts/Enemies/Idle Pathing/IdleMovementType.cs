@@ -21,16 +21,8 @@ public abstract class IdleMovementType : ScriptableObject
         transform = _transform;
         speed = _speed;
         rotSpeed = _rotSpeed;
-        lines = new Line[patrol.NumPoints()];
         rigidbody = transform.GetComponent<Rigidbody>();
-        for(int i = 0; i < lines.Length; i++)
-        {
-            Vector2 currentPoint = Utils.V3ToV2(patrol.points[i]);
-            Vector2 prevPoint = Utils.V3ToV2(patrol.points[Utils.LoopIndex(i - 1, lines.Length)]);
-            Vector2 dirToCurrentPoint = (currentPoint - prevPoint).normalized;
-            Vector2 turnBoundaryPoint = currentPoint - dirToCurrentPoint * turnDist;
-            lines[i] = new Line(turnBoundaryPoint, prevPoint);
-        }
+        
     }
     public abstract void RequestMove(float deltaTime);
     public abstract void RemovePoint(Points p, int i);

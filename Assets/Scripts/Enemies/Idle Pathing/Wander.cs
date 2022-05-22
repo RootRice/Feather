@@ -6,10 +6,9 @@ using UnityEngine;
 public class Wander : IdleMovementType
 {
     Vector3 targetPos = Vector3.zero;
-    Vector3 prevPoint;
     [SerializeField] float waitTime;
     float elapsedTime;
-    [SerializeField] [Range(0, 1f)] float acceleration;
+    GameObject DEBUG;
     public override void AddPoint(Points p, Vector3 position)
     {
         
@@ -17,28 +16,41 @@ public class Wander : IdleMovementType
 
     public override void RequestMove(float deltaTime)
     {
+        if(!lines[0].HasCrossedLine(Utils.V3ToV2(transform.position)))
+        {
+            Vector3 position = transform.position;
+            Vector3 forward = transform.forward;
+            Vector3 dir = (targetPos - position).normalized;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * deltaTime);
+            rigidbody.AddForce(forward * speed * deltaTime * Mathf.Max(Vector3.Dot(dir, forward), 0.2f));
+            elapsedTime = Time.timeSinceLevelLoad;
+            DEBUG.transform.position = targetPos;
+        }
         if (Time.timeSinceLevelLoad - elapsedTime < waitTime)
             return;
-        float tempSpeed = GetDistanceFromMiddle01(targetPos, prevPoint, transform.position) * speed;
-        Vector3 r = Vector3.MoveTowards(transform.position, targetPos, tempSpeed * deltaTime);
-        if (Vector3.SqrMagnitude(r - targetPos) < tolerance)
-        {
-            elapsedTime = Time.timeSinceLevelLoad;
-            Vector3 rand = new Vector3(Random.Range(0.0f, 1.0f), 1, Random.Range(0.0f, 1.0f));
-            prevPoint = targetPos;
-            targetPos = patrol.points[0] + Vector3.Scale((patrol.points[1]-patrol.points[0]), rand);
-            tempSpeed = GetDistanceFromMiddle01(targetPos, prevPoint, transform.position) * speed;
-            r = Vector3.MoveTowards(transform.position, targetPos, tempSpeed * deltaTime);
-        }
+        CalculateNewPosition();
+        
+
+    }
+
+    void CalculateNewPosition()
+    {
+        targetPos = patrol.points[0] + Vector3.Scale(new Vector3(Random.Range(0.0f, 1.0f), 0f, Random.Range(0.0f, 1.0f)), patrol.points[1]); 
+        Vector2 currentPoint = Utils.V3ToV2(targetPos);
+        Vector2 prevPoint = Utils.V3ToV2(transform.position);
+        lines[0].RecalculateLine(currentPoint, prevPoint);
+
     }
 
     public override void init(Transform _t, float _s, float _rs)
     {
         base.init(_t, _s, _rs);
         drawType = DrawType.Box;
-        prevPoint = transform.position-Vector3.back;
         targetPos = transform.position;
         elapsedTime = 0;
+        lines = new Line[1] { new Line(Vector2.zero, Vector2.zero) } ;
+        CalculateNewPosition();
+        DEBUG = GameObject.Find("DebugCube");
     }
 
     public override void RemovePoint(Points p, int i)
@@ -47,12 +59,5 @@ public class Wander : IdleMovementType
     }
 
 
-    float GetDistanceFromMiddle01(Vector3 a, Vector3 b, Vector3 pos)
-    {
-        Vector3 maxDistFromMiddle = (b - a) / 2;
-        Vector3 middle = a + maxDistFromMiddle;
-        float distModifier = (Vector3.SqrMagnitude(maxDistFromMiddle) / Vector3.SqrMagnitude((patrol.points[1] - patrol.points[0])/2));
-        Debug.Log(distModifier);
-        return Mathf.Max((1 - Vector3.SqrMagnitude(pos - middle) / Vector3.SqrMagnitude(maxDistFromMiddle)) * distModifier, acceleration*(1-distModifier));
-    }
+
 }

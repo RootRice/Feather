@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementType: {fileID: 11400000, guid: 6082860cdf2ab2c4f8ef4a726ab31936, type: 2}
   idleSpeed: 500
-  idleRotSpeed: 100
+  idleRotSpeed: 5
   detectionRadius: 10.514035
