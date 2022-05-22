@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 566e549f21f56434a944eadf072c260f, type: 3}
   m_Name: ChaseState
   m_EditorClassIdentifier: 
-  chasingSpeed: 5
-  minDist: 2.7543063
-  maxDist: 7.015219
+  chasingSpeed: 900
+  rotationSpeed: 5
+  minDist: 4.597099
+  maxDist: 17.521458
   pathing: {fileID: 11400000, guid: 0d953eac81cfc0241bd554ced2ce581f, type: 2}

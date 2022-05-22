@@ -9,7 +9,6 @@ public struct Line
     const float verticalLineGradient = 1e5f;
 
     float gradient;
-    float y_intercept;
     Vector2 pointOnLine_1;
     Vector2 pointOnLine_2;
 
@@ -32,7 +31,6 @@ public struct Line
         }
 
 
-        y_intercept = pointOnLine.y - gradient * pointOnLine.x;
         pointOnLine_1 = pointOnLine;
         pointOnLine_2 = pointOnLine + new Vector2(1, gradient);
 
@@ -52,7 +50,6 @@ public struct Line
 
     public void RecalculateLine(Vector2 pointOnLine, Vector2 pointPerpendicularToLine)
     {
-        Debug.Log("request");
         float dx = pointOnLine.x - pointPerpendicularToLine.x;
         float dy = pointOnLine.y - pointPerpendicularToLine.y;
 
@@ -64,9 +61,6 @@ public struct Line
         {
             gradient = -dx / dy;
         }
-
-
-        y_intercept = pointOnLine.y - gradient * pointOnLine.x;
         pointOnLine_1 = pointOnLine;
         pointOnLine_2 = pointOnLine + new Vector2(1, gradient);
 

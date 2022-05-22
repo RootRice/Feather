@@ -41,14 +41,13 @@ public class PatrolPoints : IdleMovementType
         drawType = DrawType.Lines;
         targetIndex = 0;
         DEBUG = GameObject.Find("DebugCube");
-
         lines = new Line[patrol.NumPoints()];
         for (int i = 0; i < lines.Length; i++)
         {
             Vector2 currentPoint = Utils.V3ToV2(patrol.points[i]);
             Vector2 prevPoint = Utils.V3ToV2(patrol.points[Utils.LoopIndex(i - 1, lines.Length)]);
             Vector2 dirToCurrentPoint = (currentPoint - prevPoint).normalized;
-            Vector2 turnBoundaryPoint = currentPoint - dirToCurrentPoint * turnDist;
+            Vector2 turnBoundaryPoint = currentPoint - dirToCurrentPoint * turnDist[i];
             lines[i] = new Line(turnBoundaryPoint, prevPoint);
         }
     }

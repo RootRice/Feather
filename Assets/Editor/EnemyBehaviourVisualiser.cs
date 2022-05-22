@@ -26,8 +26,6 @@ public class EnemyBehaviourVisualiser : Editor
             return;
         if ((points == null))
             return;
-        if (showPath)
-            return;
         Draw();
         Input();
     }
@@ -94,6 +92,7 @@ public class EnemyBehaviourVisualiser : Editor
         else
         {
             constructor.patrol = new Points(manager.transform);
+            constructor.turnDist = new List<float>() { 0.1f, 0.1f };
         }
     }
 
@@ -102,11 +101,19 @@ public class EnemyBehaviourVisualiser : Editor
 
         DrawAggro();
         DrawChaseRange();
+        DrawPath();
+        
+    }
 
+    void DrawPath()
+    {
+        if (showPath)
+            return;
         Handles.color = Color.red;
         Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
         for (int i = 0; i < points.NumPoints(); i++)
         {
+            Handles.color = Color.red;
             Vector3 newPos = Handles.FreeMoveHandle(points.points[i], Quaternion.identity, 0.5f, Vector3.zero, Handles.CylinderHandleCap);
             newPos = new Vector3(newPos.x, manager.transform.position.y, newPos.z);
             if (points.points[i] != newPos)
@@ -114,6 +121,7 @@ public class EnemyBehaviourVisualiser : Editor
                 Undo.RecordObject(constructor, "Move Point");
                 constructor.patrol.MovePoint(i, newPos);
             }
+
         }
         drawInstructions(constructor.patrol.points.ToArray());
     }
@@ -176,6 +184,7 @@ public class EnemyBehaviourVisualiser : Editor
         {
             Undo.RecordObject(constructor, "Create Point");
             constructor.patrol.AddPoint(newPos);
+            constructor.turnDist.Add(0.3f);
         }
 
     }
@@ -214,12 +223,37 @@ public class EnemyBehaviourVisualiser : Editor
 
     void Lines(Vector3[] vector3s)
     {
-        Handles.color = Color.green;
+        Vector3 dir;
+        Vector3 linePoint;
+        Vector3 perpendPoint;
         for (int i = 0; i < vector3s.Length - 1; i++)
         {
+            Handles.color = Color.green;
             Handles.DrawLine(vector3s[i], vector3s[i + 1]);
+            dir = (vector3s[i + 1] - vector3s[i]).normalized; 
+            Handles.color = Color.blue;
+            linePoint = vector3s[i + 1] - dir * constructor.turnDist[i+1];
+            perpendPoint = new Vector3(dir.z, dir.y, -dir.x);
+            Handles.DrawLine(linePoint + perpendPoint, linePoint - perpendPoint);
+            constructor.turnDist[i+1] = Handles.ScaleValueHandle(constructor.turnDist[i+1], vector3s[i + 1] - dir * constructor.turnDist[i+1], Quaternion.LookRotation(dir), 2.0f, Handles.ConeHandleCap, 1);
+            if (constructor.turnDist[i] < 0.19f)
+            {
+                constructor.turnDist[i] = 0.2f;
+            }
         }
+        Handles.color = Color.green;
 
         Handles.DrawLine(vector3s[vector3s.Length - 1], vector3s[0]);
+
+        Handles.color = Color.blue;
+        dir = (vector3s[0] - vector3s[vector3s.Length - 1]).normalized;
+        linePoint = vector3s[0] - dir * constructor.turnDist[0];
+        perpendPoint = new Vector3(dir.z, dir.y, -dir.x);
+        Handles.DrawLine(linePoint + perpendPoint, linePoint - perpendPoint);
+        constructor.turnDist[0] = Handles.ScaleValueHandle(constructor.turnDist[0], vector3s[0] - dir * constructor.turnDist[0], Quaternion.LookRotation(dir), 2.0f, Handles.ConeHandleCap, 1);
+        if (constructor.turnDist[0] < 0.19f)
+        {
+            constructor.turnDist[0] = 0.2f;
+        }
     }
 }

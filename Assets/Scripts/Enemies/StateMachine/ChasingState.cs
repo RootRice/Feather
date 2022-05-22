@@ -7,6 +7,7 @@ public class ChasingState : ScriptableObject, EnemyState
 {
     Transform player, myTransform;
     [SerializeField] float chasingSpeed;
+    [SerializeField] float rotationSpeed;
     public float minDist;
     public float maxDist;
     [SerializeField] TrackingMovementType pathing;
@@ -23,7 +24,7 @@ public class ChasingState : ScriptableObject, EnemyState
 
     public void Init()
     {
-        pathing.init(myTransform, player, chasingSpeed, minDist, maxDist);
+        pathing.init(myTransform, player, chasingSpeed, rotationSpeed, minDist, maxDist);
     }
 
     public void MainLoop(float deltaTime)

@@ -4,7 +4,8 @@ using UnityEngine;
 
 
 public abstract class IdleMovementType : ScriptableObject
-{    public enum DrawType { Lines, Bezier, Box }
+{    
+    public enum DrawType { Lines, Bezier, Box }
     public float speed;
     public float rotSpeed;
     protected float tolerance;
@@ -13,7 +14,7 @@ public abstract class IdleMovementType : ScriptableObject
     [HideInInspector] public Transform transform;
     protected Rigidbody rigidbody;
     [HideInInspector]public DrawType drawType;
-    public float turnDist;
+    [HideInInspector] public List<float> turnDist;
 
     public virtual void init(Transform _transform, float _speed, float _rotSpeed)
     {
