@@ -84,14 +84,19 @@ public class EnemyBehaviourVisualiser : Editor
         }
         DrawInstruction[] instructions = new DrawInstruction[] { Lines, Bezier, Box };
         constructor = manager.idleState.movementType;
-        if (constructor.patrol != null)
+        if (manager.path != null)
         {
-            points = constructor.patrol;
             drawInstructions = instructions[(int)constructor.drawType];
+            if(constructor.drawType == IdleMovementType.DrawType.Box && manager.path.points.Count > 2)
+            {
+                manager.path = new Points(manager.transform);
+                constructor.turnDist = new List<float>() { 0.1f, 0.1f };
+            }
+            points = manager.path;
         }
         else
         {
-            constructor.patrol = new Points(manager.transform);
+            manager.path = new Points(manager.transform);
             constructor.turnDist = new List<float>() { 0.1f, 0.1f };
         }
     }
@@ -119,11 +124,11 @@ public class EnemyBehaviourVisualiser : Editor
             if (points.points[i] != newPos)
             {
                 Undo.RecordObject(constructor, "Move Point");
-                constructor.patrol.MovePoint(i, newPos);
+                manager.path.MovePoint(i, newPos);
             }
 
         }
-        drawInstructions(constructor.patrol.points.ToArray());
+        drawInstructions(manager.path.points.ToArray());
     }
 
     void DrawAggro()
@@ -166,11 +171,6 @@ public class EnemyBehaviourVisualiser : Editor
         }
     }
 
-   
-
-
-
-
     void Input()
     {
         Event guiEvent = Event.current;
@@ -183,7 +183,7 @@ public class EnemyBehaviourVisualiser : Editor
         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 && guiEvent.shift)
         {
             Undo.RecordObject(constructor, "Create Point");
-            constructor.patrol.AddPoint(newPos);
+            constructor.AddPoint(manager.path, newPos);
             constructor.turnDist.Add(0.3f);
         }
 
@@ -194,8 +194,8 @@ public class EnemyBehaviourVisualiser : Editor
     void Create()
     {
         DrawInstruction[] instructions = new DrawInstruction[] { Lines, Bezier, Box };
-        constructor.patrol = new Points(manager.transform);
-        points = constructor.patrol;
+        manager.path = new Points(manager.transform);
+        points = manager.path;
         drawInstructions = instructions[(int)constructor.drawType];
     }
 

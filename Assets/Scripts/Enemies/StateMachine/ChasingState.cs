@@ -5,12 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ChaseState", menuName = "EnemyStates/Chasing", order = 1)]
 public class ChasingState : ScriptableObject, EnemyState
 {
+
     Transform player, myTransform;
     [SerializeField] float chasingSpeed;
     [SerializeField] float rotationSpeed;
+    [SerializeField] TrackingMovementType pathing;
     public float minDist;
     public float maxDist;
-    [SerializeField] TrackingMovementType pathing;
 
     public void InitValues(Transform _player, Transform _myTransform)
     {
@@ -24,6 +25,7 @@ public class ChasingState : ScriptableObject, EnemyState
 
     public void Init()
     {
+        pathing = Instantiate(pathing);
         pathing.init(myTransform, player, chasingSpeed, rotationSpeed, minDist, maxDist);
     }
 

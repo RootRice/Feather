@@ -11,8 +11,10 @@ public class IdleState : ScriptableObject, EnemyState
     [SerializeField] float idleSpeed;
     [SerializeField] float idleRotSpeed;
 
-    public void InitValues(Transform _player, Transform _myTransform)
+    public void InitValues(Transform _player, Transform _myTransform, Points p)
     {
+        movementType = Instantiate(movementType);
+        movementType.patrol = p;
         player = _player;
         myTransform = _myTransform;
     }
@@ -26,7 +28,6 @@ public class IdleState : ScriptableObject, EnemyState
     {
         movementType.init(myTransform, idleSpeed, idleRotSpeed);
     }
-
     public void MainLoop(float deltaTime)
     {
         movementType.RequestMove(deltaTime);

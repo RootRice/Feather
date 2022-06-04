@@ -23,7 +23,10 @@ public abstract class IdleMovementType : ScriptableObject
         speed = _speed;
         rotSpeed = _rotSpeed;
         rigidbody = transform.GetComponent<Rigidbody>();
-        
+    }
+    public virtual void MakePath(Points pointData)
+    {
+        patrol = pointData;
     }
     public abstract void RequestMove(float deltaTime);
     public abstract void RemovePoint(Points p, int i);

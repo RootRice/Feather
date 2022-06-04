@@ -47,7 +47,6 @@ public class Skitter : TrackingMovementType
     {
         Vector3 movementDir = Quaternion.Euler(0, -rotOffset, 0)*(SetHeightToPlayer(transform.position) - player.position).normalized;
         target = player.position + movementDir * distFromPlayer;
-        lastSkitterTime = Time.timeSinceLevelLoad;
         boundary.RecalculateLine(Utils.V3ToV2(target), Utils.V3ToV2(transform.position));
         
     }
@@ -64,7 +63,6 @@ public class Skitter : TrackingMovementType
 
     void ChaseMove(float deltaTime)
     {
-        lastSkitterTime = Time.timeSinceLevelLoad;
         Vector3 dir = (player.position - transform.position).normalized;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * deltaTime);
         rigidbody.AddForce(transform.forward * maxSpeed * deltaTime * Mathf.Max(Vector3.Dot(dir, transform.forward), 0));
@@ -72,7 +70,6 @@ public class Skitter : TrackingMovementType
 
     void FleeMove(float deltaTime)
     {
-        lastSkitterTime = Time.timeSinceLevelLoad;
         Vector3 dir = (player.position - transform.position).normalized;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * deltaTime);
         rigidbody.AddForce(transform.forward * maxSpeed * deltaTime * Mathf.Min(Vector3.Dot(dir, -transform.forward), 0));
@@ -82,19 +79,15 @@ public class Skitter : TrackingMovementType
     void Idle(float deltaTime)
     {
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(player.position - transform.position), rotSpeed * deltaTime);
-        rigidbody.AddForce(-(SetHeightToPlayer(target) - SetHeightToPlayer(transform.position)).normalized*driftFactor);
+        rigidbody.AddForce(-(SetHeightToPlayer(target) - SetHeightToPlayer(transform.position)).normalized*driftFactor + Vector3.up*(player.position.y - transform.position.y));
 
     }
 
 
     void CheckProtocol()
     {
-        if (Time.timeSinceLevelLoad - lastSkitterTime > skitterFrequency)
-        {
-            SetTarget(Random.Range(-skitterLength, skitterLength), Random.Range(minRadius + 1.5f, maxRadius - 1.5f));
-            currentProtocol = ChangeProtocol(0);
-        }
-        else if (Vector3.SqrMagnitude(SetHeightToPlayer(transform.position) - player.position) > maxRadius * maxRadius)
+        
+        if (Vector3.SqrMagnitude(SetHeightToPlayer(transform.position) - player.position) > maxRadius * maxRadius)
         {
             SetTarget(0, maxRadius);
             currentProtocol = ChangeProtocol(1);
@@ -103,6 +96,11 @@ public class Skitter : TrackingMovementType
         {
             SetTarget(0, minRadius);
             currentProtocol = ChangeProtocol(2);
+        }
+        else if (Time.timeSinceLevelLoad - lastSkitterTime > skitterFrequency)
+        {
+            SetTarget(Random.Range(-skitterLength, skitterLength), Random.Range(minRadius + 1.5f, maxRadius - 1.5f));
+            currentProtocol = ChangeProtocol(0);
         }
         else if(boundary.HasCrossedLine(Utils.V3ToV2(transform.position)))
             currentProtocol = ChangeProtocol(3);

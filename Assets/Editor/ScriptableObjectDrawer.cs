@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEditor;
 
@@ -6,7 +6,7 @@ using UnityEditor;
 public class ScriptableObjectDrawer : PropertyDrawer
 {
     // Cached scriptable object editor
-    private Editor editor = null;
+    Editor editor = null;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -25,13 +25,34 @@ public class ScriptableObjectDrawer : PropertyDrawer
             // Make child fields be indented
             EditorGUI.indentLevel++;
 
-            // Draw object properties
+            // background
+            Color oldColor = GUI.backgroundColor;
+            GUI.backgroundColor = Color.red;
+            GUILayout.BeginVertical("box");
+            GUI.backgroundColor = oldColor;
+
             if (!editor)
                 Editor.CreateCachedEditor(property.objectReferenceValue, null, ref editor);
-            editor.OnInspectorGUI();
+
+            // Draw object properties
+            EditorGUI.BeginChangeCheck();
+            if (editor) // catch empty property
+            {
+                editor.OnInspectorGUI();
+            }
+            if (EditorGUI.EndChangeCheck())
+                property.serializedObject.ApplyModifiedProperties();
+
+            GUILayout.EndVertical();
 
             // Set indent back to what it was
             EditorGUI.indentLevel--;
         }
     }
+}
+
+[CanEditMultipleObjects]
+[CustomEditor(typeof(UnityEngine.Object), true)]
+public class UnityObjectEditor : Editor
+{
 }
