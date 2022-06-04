@@ -13,4 +13,9 @@ public static class Utils
     {
         return new Vector2(vec.x, vec.z);
     }
+
+    public static float LoopAngle(float angle)
+    {
+        return (angle + 360) % 360;
+    }
 }
