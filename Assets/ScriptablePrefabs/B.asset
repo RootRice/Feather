@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfed42f7c1a137049bcd48999fec441e, type: 3}
-  m_Name: AttackPrepState
+  m_Script: {fileID: 11500000, guid: 5fe27e400d4f5174db7b11e18a2cb3d8, type: 3}
+  m_Name: B
   m_EditorClassIdentifier: 
-  targetDistance: 3
-  approachSpeed: 1
-  fleeSpeed: 50
-  rotSpeed: 5
+  type: 1

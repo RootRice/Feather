@@ -18,6 +18,8 @@ public class EnemyController : MonoBehaviour
     public IdleState idleState;
     public ChasingState chaseState;
     public AttackPrepState prepState;
+
+    public AttackProfile attackProfile;
     public void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -54,6 +56,11 @@ public class EnemyController : MonoBehaviour
     public void SetTargetAngle(float angle)
     {
         prepState.SetTargetSlot(angle);
+    }
+
+    public void NewAttack()
+    {
+
     }
 
 }

@@ -28,12 +28,13 @@ public class StartAttack : HiveState
     void SetTimers()
     {
         timer = 0;
-        timers = new float[hive.enemies.Count];
+        timers = new float[hive.activeEnemies.Count];
         for (int i = 0; i < timers.Length; i++)
         {
             timers[i] = Random.Range(0.1f, 0.7f);
         }
-        timers[0] = 0;
+        if(timers.Length > 0)
+            timers[0] = 0;
         test = new bool[timers.Length];
     }
 
@@ -58,7 +59,7 @@ public class StartAttack : HiveState
     public void MainLoop(float deltaTime)
     {
         timer += deltaTime;
-        List<EnemyController> enemies = hive.enemies;
+        List<EnemyController> enemies = hive.activeEnemies;
         Vector3 playerPos = player.position;
         for(int i = 0; i < enemies.Count; i++)
         {
