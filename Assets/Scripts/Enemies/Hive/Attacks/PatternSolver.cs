@@ -13,57 +13,65 @@ public class PatternSolver
     int[][] enemyAttacks;
 
     List<List<int[]>> combinations;
-    List<List<int[]>> permutations;
+    List<List<int[]>>[] permutations;
+
+    int[,] comparisonMatrix;
 
     public void FindCombinations()
     {
         combinations = new List<List<int[]>>();
         FillList(0, new List<int[]>());
-        UnityEngine.Debug.Log(combinations.Count);
         RemoveDuplicateCombos();
-        UnityEngine.Debug.Log(combinations.Count);
         FindPermutations(combinations);
-        RemoveUnit(3);
     }
 
     void FindPermutations(List<List<int[]>> list)
     {
-        Stopwatch timer = new Stopwatch();
-        timer.Start();
-        permutations = new List<List<int[]>>();
-        foreach(List<int[]> l in list)
+        permutations = new List<List<int[]>>[list.Count];
+        for(int i = 0; i < permutations.Length; i++)
         {
-            Permute(l, new List<int[]>());
+            permutations[i] = new List<List<int[]>>();
         }
-        timer.Stop();
-        UnityEngine.Debug.Log(timer.ElapsedMilliseconds);
-        UnityEngine.Debug.Log(permutations.Count);
+        for(int i = 0; i < list.Count; i++) 
+        {
+            Permute(list[i], new List<int[]>(), i);
+        }
     }
 
     void RemoveUnit(int index)
     {
-        Stopwatch timer = new Stopwatch();
-        timer.Start();
-        foreach (List<int[]> l in permutations)
+        for (int i = 0; i < combinations.Count; i++)
         {
-            for(int i = 0; i < l.Count; i++)
+            for(int ii = 0; ii < combinations[i].Count; ii++)
             {
-                if(l[i][0] == index)
+                if ((combinations[i][ii][0]) == index)
                 {
-                    l.RemoveAt(i);
-                    i--;
+                    combinations[i].RemoveAt(ii);
+                    ii--;
                 }
             }
         }
-        timer.Stop();
-        UnityEngine.Debug.Log(timer.ElapsedMilliseconds);
+        for (int i = 0; i < permutations.Length; i++)
+        {
+            foreach (List<int[]> l in permutations[i])
+            {
+                for (int ii = 0; ii < l.Count; ii++)
+                {
+                    if (l[ii][0] == index)
+                    {
+                        l.RemoveAt(ii);
+                        ii--;
+                    }
+                }
+            }
+        }
     }
 
-    void Permute(List<int[]> choices, List<int[]> workingSet)
+    void Permute(List<int[]> choices, List<int[]> workingSet, int combID)
     {
         if(choices.Count == 0)
         {
-            permutations.Add(new List<int[]>(workingSet));
+            permutations[combID].Add(new List<int[]>(workingSet));
         }
 
         for(int i = 0; i < choices.Count; i++)
@@ -71,7 +79,7 @@ public class PatternSolver
             int[] hold = choices[i];
             workingSet.Add(hold);
             choices.RemoveAt(i);
-            Permute(choices, workingSet);
+            Permute(choices, workingSet, combID);
 
             choices.Insert(i, hold);
             workingSet.Remove(hold);
@@ -93,8 +101,6 @@ public class PatternSolver
         }
         currentList.Add(new int[2] { index, enemyAttacks[index][0] });
         FillList(index + 1, currentList);
-        
-        
     }
 
     void RemoveDuplicateCombos()
@@ -147,4 +153,134 @@ public class PatternSolver
         }
     }
 
+    public int[][] FindCombo(int[] combo)
+    {
+        int[] matches = new int[combinations.Count];
+        List<int> maxMatches = new List<int>();
+        List<int> validPerms = new List<int>();
+        int highestNumMatches = 0;
+        for (int i = 0; i < matches.Length; i++)
+        {
+            matches[i] = FindMatchingContentCount(combo, combinations[i]);
+            highestNumMatches = Mathf.Max(highestNumMatches, matches[i]);
+        }
+        for (int i = 0; i < matches.Length; i++)
+        {
+            if (matches[i] == highestNumMatches)
+            {
+                maxMatches.Add(i);
+            }
+        }
+
+        comparisonMatrix = new int[combo.Length + 1, permutations[maxMatches[0]][0].Count + 1];
+        int matrixX = combo.Length + 1;
+        int matrixY = permutations[maxMatches[0]][0].Count + 1;
+        int n = permutations[maxMatches[0]].Count;
+        int ak = UnityEngine.Random.Range(0, maxMatches.Count);
+        for (int ii = 0; ii < n; ii++)
+        {
+            if (FindLCS(combo, permutations[maxMatches[ak]][ii], highestNumMatches, matrixX, matrixY))
+            {
+                validPerms.Add(ii);
+            }
+        }
+        int aj = UnityEngine.Random.Range(0, validPerms.Count);
+        List<int[]> selected = permutations[maxMatches[ak]][validPerms[aj]];
+        int[] attackerIndices = GetLCS(combo, selected, highestNumMatches, matrixX, matrixY);
+        List<int[]> attackerData = new List<int[]>();
+        foreach(int i in attackerIndices)
+        {
+            attackerData.Add(selected[i]);
+        }
+        return attackerData.ToArray();
+    }
+
+    bool FindLCS(int[] combo, List<int[]> sequence, int expectedLength, int m, int n)
+    {
+        int x = combo[m - 2];
+        int y = sequence[n - 2][1];
+        for (int i = 1; i < m; i++)
+        {
+            int comboPiece = combo[i - 1];
+            for (int ii = 1; ii < n; ii++)
+            {
+                if (comboPiece == sequence[ii - 1][1])
+                {
+                    comparisonMatrix[i, ii] = comparisonMatrix[i - 1, ii - 1] + 1;
+                }
+                else
+                {
+                    comparisonMatrix[i, ii] = Math.Max(comparisonMatrix[i - 1, ii], comparisonMatrix[i, ii - 1]);
+                }
+            }
+        }
+        return comparisonMatrix[m-1, n-1] >= expectedLength;
+    }
+
+    int[] GetLCS(int[] combo, List<int[]> sequence, int expectedLength, int m, int n)
+    {
+        int x = combo[m - 2];
+        int y = sequence[n - 2][1];
+        for (int i = 1; i < m; i++)
+        {
+            int comboPiece = combo[i - 1];
+            for (int ii = 1; ii < n; ii++)
+            {
+                if (comboPiece == sequence[ii - 1][1])
+                {
+                    comparisonMatrix[i, ii] = comparisonMatrix[i - 1, ii - 1] + 1;
+                }
+                else
+                {
+                    comparisonMatrix[i, ii] = Math.Max(comparisonMatrix[i - 1, ii], comparisonMatrix[i, ii - 1]);
+                }
+            }
+        }
+        int[] indices = new int[expectedLength];
+        int j = m - 1;
+        int jj = n - 1;
+        int k = expectedLength-1;
+        while (comparisonMatrix[j,jj] != 0)
+        {
+            int index = comparisonMatrix[j, jj];
+            int indexMX = comparisonMatrix[j - 1, jj];
+            int indexMY = comparisonMatrix[j, jj - 1];
+            if (index > Math.Max(indexMX, indexMY))
+            {
+                indices[k] = jj-1;
+                k--;
+                j--;
+                jj--;
+            }
+            else if (index == indexMX)
+            {
+                j--;
+            }
+            else
+            {
+                jj--;
+            }
+        }
+        return indices;
+    }
+
+    int FindMatchingContentCount(int[] a, List<int[]> b)
+    {
+        List<int> aList = new List<int>(a);
+        List<int[]> bList = new List<int[]>(b);
+        int j = 0;
+        for(int i = 0; i < aList.Count; i++)
+        {
+            for(int ii = 0; ii < bList.Count; ii++)
+            {
+                if(aList[i] == bList[ii][1])
+                {
+                    j++;
+                    bList.RemoveAt(ii);
+                    break;
+                }
+            }
+        }
+        return j;
+    }
 }

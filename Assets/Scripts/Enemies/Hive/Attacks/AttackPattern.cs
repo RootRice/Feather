@@ -6,6 +6,7 @@ using UnityEngine;
 public class AttackPattern : ScriptableObject
 {
     public Attack[] attacks;
+    public float[] attackTimings;
 
     public Attack GetAttack(int index)
     {

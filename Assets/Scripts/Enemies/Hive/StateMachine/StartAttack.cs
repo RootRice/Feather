@@ -23,6 +23,10 @@ public class StartAttack : HiveState
         SetTimers();
         SetAngles();
         enemySpots = new int[timers.Length];
+        for(int i = 0; i < hive.activeEnemies.Count; i++)
+        {
+            hive.activeEnemies[i].SetState(EnemyController.EnemyStates.ReadyingAttack);
+        }
     }
 
     void SetTimers()

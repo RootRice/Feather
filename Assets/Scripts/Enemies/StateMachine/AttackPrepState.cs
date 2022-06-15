@@ -12,7 +12,12 @@ public class AttackPrepState : ScriptableObject, EnemyState
     [SerializeField] float approachSpeed;
     [SerializeField] float fleeSpeed;
     [SerializeField] float rotSpeed;
+    float startTime;
 
+    public AttackType attack;
+    public float attackTimer;
+
+    Color[] TEMPCOLORS = new Color[3] { Color.red, Color.blue, Color.black };
     public void EndState()
     {
         throw new System.NotImplementedException();
@@ -25,7 +30,7 @@ public class AttackPrepState : ScriptableObject, EnemyState
     }
     public void Init()
     {
-        
+        startTime = Time.timeSinceLevelLoad;
     }
     void FleeMove(float deltaTime)
     {
@@ -35,6 +40,10 @@ public class AttackPrepState : ScriptableObject, EnemyState
     }
     public void MainLoop(float deltaTime)
     {
+        if(Time.timeSinceLevelLoad - startTime > attackTimer)
+        {
+            myTransform.gameObject.GetComponentInChildren<MeshRenderer>().material.color = TEMPCOLORS[(int)attack];
+        }
         if (Vector3.SqrMagnitude(myTransform.position - player.position) < 3.0f)
         {
             FleeMove(deltaTime);

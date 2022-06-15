@@ -20,7 +20,7 @@ public class EnemyController : MonoBehaviour
     public AttackPrepState prepState;
 
     public AttackProfile attackProfile;
-    public void Start()
+    public void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         InitialiseStates();
@@ -58,9 +58,11 @@ public class EnemyController : MonoBehaviour
         prepState.SetTargetSlot(angle);
     }
 
-    public void NewAttack()
+    public void NewAttack(AttackType type, float timeOffset)
     {
-
+        currentState = states[(int)EnemyStates.ReadyingAttack];
+        prepState.attack = type;
+        prepState.attackTimer = timeOffset;
     }
 
 }

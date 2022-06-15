@@ -7,7 +7,7 @@ public class EnemyHive : MonoBehaviour
 {
     [SerializeField] List<EnemyController> enemies;
     List<Transform> enemyTransforms;
-    [HideInInspector] public List<EnemyController> activeEnemies;
+     public List<EnemyController> activeEnemies;
 
 
     float timer;
@@ -15,25 +15,32 @@ public class EnemyHive : MonoBehaviour
 
     [SerializeField] AttackPattern pattern1;
 
+    PatternSolver pSolver;
+
     private void Awake()
     {
+        activeEnemies = new List<EnemyController>();
         enemyTransforms = new List<Transform>();
         foreach (EnemyController e in enemies)
         {
             enemyTransforms.Add(e.transform);
         }
-        activeEnemies = new List<EnemyController>();
-        startAttacks.Init(this);
-        startAttacks.Start();
+
         GetEnemyAbilities();
     }
 
+    private void Start()
+    {
+        GetAttackers(pattern1);
+        startAttacks.Init(this);
+        startAttacks.Start();
+    }
     public void Update()
     {
         timer += Time.deltaTime;
         if (timer > 0.0f)
             startAttacks.MainLoop(Time.deltaTime);
-
+        
 
     }
 
@@ -49,8 +56,26 @@ public class EnemyHive : MonoBehaviour
                 //Debug.Log("Enemy " + i + "'s " + ii + "th attack is: " + enemyAttacks[i][ii]);
             }
         }
-        PatternSolver pSolver = new PatternSolver(enemyAttacks);
+        pSolver = new PatternSolver(enemyAttacks);
         pSolver.FindCombinations();
+        
+    }
+
+    void GetAttackers(AttackPattern pattern)
+    {
+        int[] combo = new int[pattern.attacks.Length];
+        for (int i = 0; i < combo.Length; i++)
+        {
+            combo[i] = (int)pattern.attacks[i].type;
+        }
+
+        int[][] enemiesToAttack = pSolver.FindCombo(combo);
+        int n = enemiesToAttack.GetLength(0);
+        for(int i = 0; i < n; i++)
+        {
+            activeEnemies.Add(enemies[enemiesToAttack[i][0]]);
+            enemies[enemiesToAttack[i][0]].NewAttack((AttackType)enemiesToAttack[i][1], pattern.attackTimings[i]);
+        }
     }
 
   
