@@ -45,6 +45,13 @@ public class PlayerController : MonoBehaviour
     Vector3 startPos;
     MeshRenderer myRenderer;
     Color[] colours = new Color[4] { Color.red, Color.blue, Color.green, Color.white };
+
+    Animator animationController;
+    int horizontalSpeedHash = Animator.StringToHash("HorizontalSpeed");
+    int verticalSpeedHash = Animator.StringToHash("VerticalSpeed");
+    int jumpHash = Animator.StringToHash("Jump");
+    int dodgeHash = Animator.StringToHash("Dodge");
+    int groundedHash = Animator.StringToHash("Grounded");
     void CreateArr()
     {
         actionConstraint = new ConstraintAction[Enum.GetValues(typeof(Constraints.OngoingTag)).Length];
@@ -66,6 +73,7 @@ public class PlayerController : MonoBehaviour
         myCollider = GetComponent<CapsuleCollider>();
         gravity.Initialise();
         myRenderer = body.GetComponent<MeshRenderer>();
+        animationController = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
@@ -80,6 +88,7 @@ public class PlayerController : MonoBehaviour
     {
         Controls();
         ApplyBlock();
+        UpdateAnimationParams();
     }
 
     void ApplyBlock()
@@ -114,7 +123,6 @@ public class PlayerController : MonoBehaviour
                 foreach(Constraints.OngoingTag t in playerForces[i].CheckOngoingConstraints())
                 {
                     ongoingConstraints[(int)t] = true;
-                    //actionConstraint[(int)t]();
                 }
             }
             else
@@ -124,7 +132,6 @@ public class PlayerController : MonoBehaviour
             }
         }
         myRigidbody.AddForce(gravity.ApplyForce(Time.fixedDeltaTime, grounded || ongoingConstraints[(int)Constraints.OngoingTag.FreezeGrav]));
-
         myRigidbody.AddForce(speed * axis* Time.fixedDeltaTime);
     }
 
@@ -149,14 +156,11 @@ public class PlayerController : MonoBehaviour
         Vector3 joystickAxis = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
         if(Mathf.Abs(joystickAxis.x) + Mathf.Abs(joystickAxis.z) != 0)
         {
-            
-            
             prevAxis = axis;
             axis.x = joystickAxis.x;
             axis.z = joystickAxis.z;
             axis = Quaternion.AngleAxis(Camera.main.transform.rotation.eulerAngles.y, Vector3.up) * axis;
             axis = axis.normalized;
-            
 
             speed = maxSpeed;
             if (ongoingConstraints[(int)Constraints.OngoingTag.FreezeMovementInput])
@@ -169,9 +173,6 @@ public class PlayerController : MonoBehaviour
             speed = 0;
         }
 
-        
-
-
         if (Input.GetKeyDown(KeyCode.Period) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeBlockInput])
         {
             currentControls.LBlock(this);
@@ -183,16 +184,25 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightShift) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeDodgeInput])
         {
             currentControls.Dodge(this, new ActiveForce.InitParams(axis.x, axis.magnitude, axis.z, axis.magnitude));
+            animationController.SetTrigger(dodgeHash);
         }
         if (Input.GetKeyDown(KeyCode.Space) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeJumpInput])
         {
             currentControls.Jump(this);
+            animationController.SetTrigger(jumpHash);
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
 
+    }
+
+    void UpdateAnimationParams()
+    {
+        animationController.SetFloat(horizontalSpeedHash, speed);
+        animationController.SetFloat(verticalSpeedHash, myRigidbody.velocity.y);
+        animationController.SetBool(groundedHash, grounded);
     }
 
     public void AddActiveForce(ActiveForce force)
@@ -278,7 +288,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            transform.position = startPos;
+            //transform.position = startPos;
         }
     }
 

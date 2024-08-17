@@ -24,6 +24,6 @@ MonoBehaviour:
   durations:
   - 0
   - 0.175
-  - 0.4
+  - 0.5
   ongoingEffects: 00000000
   initialEffects: 00000000
