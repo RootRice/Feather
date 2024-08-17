@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: DodgeAnimation
   m_EditorClassIdentifier: 
   xRotation:
-  - 90
+  - 0
   - 0
   yRotation:
+<<<<<<< Updated upstream
   - -45
   - 415
+=======
+  - 0
+  - 0
+>>>>>>> Stashed changes
   zRotation:
   - 0
   - 0

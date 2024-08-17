@@ -86,7 +86,11 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Gradient_Noise_Scale: 0.07
+<<<<<<< Updated upstream
     - _LightningIntensity: 1.7370441
+=======
+    - _LightningIntensity: 1.663486
+>>>>>>> Stashed changes
     - _Lightning_Noise_Scale: -0.01
     - _Metallic: 0
     - _Mode: 0
