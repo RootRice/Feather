@@ -17,7 +17,7 @@ MonoBehaviour:
   - 300
   yForce:
   - 0
-  - -100
+  - 1000
   zForce:
   - 13000
   - 300

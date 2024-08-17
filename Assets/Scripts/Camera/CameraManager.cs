@@ -15,7 +15,8 @@ public class CameraManager : MonoBehaviour
     Transform player;
 
     [Header("Camera Properties")]
-    [SerializeField] Vector3 defaultOffset;
+    [SerializeField] Vector3 defaultLookOffset;
+    [SerializeField] Vector3 defaultPositionOffset;
     [SerializeField] float defaultSpeed;
     [SerializeField] float defaultRotationSpeed;
 
@@ -23,7 +24,7 @@ public class CameraManager : MonoBehaviour
     private void Awake()
     {
         cameraConstraints = new List<CameraMode>();
-        defaultCamera = new FollowCamera(defaultOffset, defaultSpeed, defaultRotationSpeed);
+        defaultCamera = new FollowCamera(defaultPositionOffset, defaultLookOffset, defaultSpeed, defaultRotationSpeed);
 
         _transform = transform;
 
@@ -76,8 +77,6 @@ public class CameraManager : MonoBehaviour
         cameraRotVel = 0;
     }
 }
-
-
 
 public interface CameraMode
 {
@@ -224,7 +223,7 @@ public class StaticCamera : CameraMode
 
 public class FollowCamera : CameraMode
 {
-    Vector3 offset;
+    Vector3 lookOffset;
 
     //Camera movement
     float camSpeed;
@@ -233,16 +232,16 @@ public class FollowCamera : CameraMode
     Vector3 cameraVel;
     float cameraRotVel;
     float cameraRotProgress;
-    public FollowCamera(Vector3 cameraOffset, float cameraSpeed, float cameraRotationSpeed)
+    public FollowCamera(Vector3 cameraOffset, Vector3 _lookOffset, float cameraSpeed, float cameraRotationSpeed)
     {
-        offset = cameraOffset;
+        lookOffset = _lookOffset;
         camSpeed = cameraSpeed;
         camRotSpeed = cameraRotationSpeed;
         cameraTransform = Camera.main.transform;
     }
     public CameraMode.Parameters GetPositionAndRotation(Vector3 playerPosition)
     {
-        Vector3 targetPos = playerPosition + offset;
+        Vector3 targetPos = playerPosition + lookOffset;
         Vector3 cameraDir = (playerPosition - targetPos).normalized;
         Quaternion cameraAngle = Quaternion.LookRotation(cameraDir);
 

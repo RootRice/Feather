@@ -7,12 +7,20 @@ public class MidAirControls : ControlScheme
     bool jumpCharge = false;
     bool blockCharge = false;
 
+    int airDashHash = Animator.StringToHash("Air Dash");
+    int dashHash = Animator.StringToHash("Dash");
+    int jumpHash = Animator.StringToHash("Jump");
+    int doubleJumpHash = Animator.StringToHash("Double Jump");
+    int startMovingHash = Animator.StringToHash("StartMoving");
+    int fallHash = Animator.StringToHash("Fall");
+
     public void Dodge(PlayerController player, ActiveForce.InitParams initParams)
     {
         if (jumpCharge)
             return;
         player.AddActiveForce(player.dodgeForce, initParams);
-        player.AddAnimation(player.dodgeAnimation);
+        player.AddTransformAnimation(player.dodgeAnimation);
+        player.PlayAnimation(airDashHash, 1.0f);
         jumpCharge = true;
     }
 
@@ -20,7 +28,8 @@ public class MidAirControls : ControlScheme
     {
         if (jumpCharge)
             return;
-        player.AddAnimation(player.jumpAnimation);
+        player.AddTransformAnimation(player.jumpAnimation);
+        player.PlayAnimation(doubleJumpHash, 1.0f);
         player.AddActiveForce(player.jumpForce);
         jumpCharge = true;
     }
@@ -30,7 +39,7 @@ public class MidAirControls : ControlScheme
         if (blockCharge)
             return;
         player.SetBlock(new OneBlock(0.3f));
-        player.AddAnimation(player.jumpAnimation);
+        player.AddTransformAnimation(player.jumpAnimation);
         player.AddActiveForce(player.doubleJumpForce);
         blockCharge = true;
     }
@@ -45,7 +54,7 @@ public class MidAirControls : ControlScheme
         if (blockCharge)
             return;
         player.SetBlock(new TwoBlock(0.3f));
-        player.AddAnimation(player.jumpAnimation);
+        player.AddTransformAnimation(player.jumpAnimation);
         player.AddActiveForce(player.doubleJumpForce);
         blockCharge = true;
     }

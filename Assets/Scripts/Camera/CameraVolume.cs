@@ -35,7 +35,7 @@ public class CameraVolume : MonoBehaviour
                 break;
 
             case CameraMode.Modes.Follow:
-                myMode = new FollowCamera(vVal1, speed, rotSpeed);
+                myMode = new FollowCamera(vVal1, vVal2, speed, rotSpeed);
                 break;
 
             default:

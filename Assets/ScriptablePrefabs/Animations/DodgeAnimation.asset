@@ -16,8 +16,8 @@ MonoBehaviour:
   - 90
   - 0
   yRotation:
-  - -45
-  - 415
+  - 0
+  - 360
   zRotation:
   - 0
   - 0

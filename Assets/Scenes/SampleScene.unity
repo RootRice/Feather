@@ -1004,7 +1004,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 680890483}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -46.8, y: 0, z: 0}
+  m_LocalPosition: {x: -46.8, y: 20.38, z: 0}
   m_LocalScale: {x: 30, y: 1, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1411,7 +1411,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8193f50b3c5961d43a76b4bf895cc20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultOffset: {x: -15, y: 25, z: -15}
+  defaultLookOffset: {x: 0, y: 0, z: 0}
+  defaultPositionOffset: {x: 0, y: 0, z: 0}
   defaultSpeed: 2
   defaultRotationSpeed: 9
 --- !u!1 &971646934
@@ -1570,7 +1571,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1076664921}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.09, y: 3.02, z: 3.33}
+  m_LocalPosition: {x: 1.09, y: 23.4, z: 3.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1601,10 +1602,14 @@ MonoBehaviour:
   gravity: {fileID: 11400000, guid: 1061efb9a09c69149a83ba67155a9994, type: 2}
   dodgeAnimation: {fileID: 11400000, guid: a761367ef4b09ac428003ce2b91135e3, type: 2}
   jumpAnimation: {fileID: 11400000, guid: 1348aa4e7d945ed4e9df6733da6737be, type: 2}
-  maxSpeed: 2000
+  speedSwitchTime: 0.5
   speed: 0
+  speedTiers:
+  - 2000
+  - 4000
   rotSpeed: 5
   body: {fileID: 2388310839261163795}
+  landAnimFallTime: 1
 --- !u!136 &1076664928
 CapsuleCollider:
   m_ObjectHideFlags: 0
