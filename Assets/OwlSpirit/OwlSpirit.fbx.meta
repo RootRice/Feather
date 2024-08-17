@@ -75,7 +75,7 @@ ModelImporter:
       takeName: root|Dodge
       internalID: 0
       firstFrame: 0
-      lastFrame: 96
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -162,7 +162,7 @@ ModelImporter:
       takeName: root|Jump
       internalID: 0
       firstFrame: 0
-      lastFrame: 56
+      lastFrame: 12
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
