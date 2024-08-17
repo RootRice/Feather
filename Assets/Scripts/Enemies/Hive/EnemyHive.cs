@@ -75,6 +75,8 @@ public class EnemyHive : MonoBehaviour
         {
             activeEnemies.Add(enemies[enemiesToAttack[i][0]]);
             enemies[enemiesToAttack[i][0]].NewAttack((AttackType)enemiesToAttack[i][1], pattern.attackTimings[i]);
+            Debug.Log(i);
+            Debug.Log(pattern.attackTimings.GetLength(0));
         }
     }
 

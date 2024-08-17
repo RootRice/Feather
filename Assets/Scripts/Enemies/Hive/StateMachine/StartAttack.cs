@@ -27,6 +27,7 @@ public class StartAttack : HiveState
         {
             hive.activeEnemies[i].SetState(EnemyController.EnemyStates.ReadyingAttack);
         }
+        Debug.Log(hive.activeEnemies.Count);
     }
 
     void SetTimers()
@@ -115,7 +116,5 @@ public class StartAttack : HiveState
             enemySpots[i] = j;
             test[i] = true;
         }
-        
-
     }
 }

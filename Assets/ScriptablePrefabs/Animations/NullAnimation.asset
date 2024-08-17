@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9e165392b679ed4faf42cc7a307c4d1, type: 3}
-  m_Name: DodgeAnimation
+  m_Name: NullAnimation
   m_EditorClassIdentifier: 
   xRotation:
-  - 90
+  - 0
   - 0
   yRotation:
-  - -45
-  - 415
+  - 0
+  - 0
   zRotation:
   - 0
   - 0
   durations:
-  - 1
-  - 0.5
+  - 0
+  - 0
   - 0
   animationRate: 8000
