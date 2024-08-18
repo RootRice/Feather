@@ -17,7 +17,6 @@ public class SprintingControls : ControlScheme
 
     public void Jump(PlayerController player, ActiveForce.InitParams initParams)
     {
-        player.SetSpeedTier(0, false);
         player.AddActiveForce(player.dashJumpForce, initParams);
         player.PlayAnimation(jumpHash, 1.0f);
     }
