@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
     Animator animationController;
     float timeOfAnimationEnd;
-    Vector3 joystickAxis;
+    [HideInInspector] public Vector3 joystickAxis;
     int groundedHash = Animator.StringToHash("Grounded");
     int horizontalSpeedHash = Animator.StringToHash("HorizontalSpeed");
     int landHash = Animator.StringToHash("Land");
@@ -195,8 +195,9 @@ public class PlayerController : MonoBehaviour
     {
         float sphereRadius = myCollider.radius * 0.95f;
         float cylinderHeight = myCollider.bounds.extents.y - sphereRadius + 0.1f;
+        Vector3 rayOrigin = myCollider.center + myRigidbody.position;
         RaycastHit hit;
-        if(Physics.SphereCast(myRigidbody.position, sphereRadius, Vector3.down, out hit,cylinderHeight, 2147483647, QueryTriggerInteraction.Ignore))
+        if(Physics.SphereCast(rayOrigin, sphereRadius, Vector3.down, out hit,cylinderHeight, 2147483647, QueryTriggerInteraction.Ignore))
         {
             if (!grounded) HitGroundEffects();
             grounded = true;
@@ -218,9 +219,8 @@ public class PlayerController : MonoBehaviour
     {
         joystickAxis = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
         animationController.SetFloat(inputHash, joystickAxis.magnitude);
-        if (Mathf.Abs(joystickAxis.x) + Mathf.Abs(joystickAxis.z) != 0)
+        if (joystickAxis.magnitude > 0.1f)
         {
-            
             axis.x = joystickAxis.x;
             axis.z = joystickAxis.z;
             axis = Quaternion.AngleAxis(Camera.main.transform.rotation.eulerAngles.y, Vector3.up) * axis;
