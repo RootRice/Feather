@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class GroundControls : ControlScheme
 {
+    int dashHash = Animator.StringToHash("Dash");
+    int jumpHash = Animator.StringToHash("Jump");
 
     public void Dodge(PlayerController player, ActiveForce.InitParams initParams)
     {
         player.transform.position += new Vector3(0f, 0.1f, 0f);
         player.AddActiveForce(player.dodgeForce, initParams);
-        player.AddAnimation(player.dodgeAnimation);
+        player.PlayAnimation(dashHash,1.0f);
     }
 
     public void Jump(PlayerController player)
     {
         player.AddActiveForce(player.jumpForce);
+        player.PlayAnimation(jumpHash, 1.0f);
     }
 
     public void LBlock(PlayerController player)

@@ -224,7 +224,6 @@ public class StaticCamera : CameraMode
 public class FollowCamera : CameraMode
 {
     Vector3 lookOffset;
-    Vector3 positionOffset;
 
     //Camera movement
     float camSpeed;
@@ -236,24 +235,17 @@ public class FollowCamera : CameraMode
     public FollowCamera(Vector3 cameraOffset, Vector3 _lookOffset, float cameraSpeed, float cameraRotationSpeed)
     {
         lookOffset = _lookOffset;
-        positionOffset = cameraOffset;
         camSpeed = cameraSpeed;
         camRotSpeed = cameraRotationSpeed;
         cameraTransform = Camera.main.transform;
     }
     public CameraMode.Parameters GetPositionAndRotation(Vector3 playerPosition)
     {
-        Vector3 targetPos = playerPosition + positionOffset;
-        Vector3 cameraPos = cameraTransform.position;
-        float cameraHeight = targetPos.y;
-        Vector3 cameraDir = (playerPosition - targetPos + lookOffset).normalized;
+        Vector3 targetPos = playerPosition + lookOffset;
+        Vector3 cameraDir = (playerPosition - targetPos).normalized;
         Quaternion cameraAngle = Quaternion.LookRotation(cameraDir);
 
-        targetPos.y = 0;
-        cameraPos.y = 0;
-
-        Vector3 pos = Vector3.SmoothDamp(cameraPos, targetPos, ref cameraVel, camSpeed);
-        pos.y = cameraHeight;
+        Vector3 pos = Vector3.SmoothDamp(cameraTransform.position, targetPos, ref cameraVel, camSpeed);
         cameraRotProgress = Mathf.SmoothDamp(cameraRotProgress, 1f, ref cameraRotVel, camRotSpeed);
         Quaternion rot = Quaternion.Slerp(cameraTransform.rotation, cameraAngle, cameraRotProgress);
 

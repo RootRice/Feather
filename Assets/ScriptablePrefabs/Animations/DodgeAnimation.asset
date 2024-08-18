@@ -16,13 +16,13 @@ MonoBehaviour:
   - 90
   - 0
   yRotation:
-  - -45
-  - 45
+  - 0
+  - 360
   zRotation:
   - 0
   - 0
   durations:
   - 1
-  - 0.25
+  - 0.5
   - 0
-  animationRate: 400
+  animationRate: 8000

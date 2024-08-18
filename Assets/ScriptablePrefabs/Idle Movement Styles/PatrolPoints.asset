@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba88a828c6a683e4bb60931d3b5ec6e3, type: 3}
+  m_Name: PatrolPoints
+  m_EditorClassIdentifier: 
+  speed: 500
+  rotSpeed: 5
+  patrol:
+    points:
+    - {x: -2.4330335, y: 2.72, z: -6.7787895}
+    - {x: 5.656969, y: 2.72, z: -4.8527193}
+    - {x: 6.139122, y: 2.72, z: 3.108286}
+    - {x: -4.8198986, y: 2.72, z: 3.3412457}
+    - {x: -10.187655, y: 2.72, z: -0.5842129}
+    - {x: -10.399382, y: 2.72, z: -4.431163}
+    - {x: -6.871813, y: 2.72, z: -6.761074}
+  transform: {fileID: 0}
+  drawType: 0
+  turnDist:
+  - 1.8936257
+  - 1.4744148
+  - 4.5558996
+  - 1.0336035
+  - 2.2156537
+  - 1.9152558
+  - 1.8613733
