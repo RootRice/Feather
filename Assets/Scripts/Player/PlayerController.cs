@@ -209,8 +209,6 @@ public class PlayerController : MonoBehaviour
             if (ongoingConstraints[(int)Constraints.OngoingTag.FreezeMovementInput])
             {
                 speed = 0;
-                speedTierIndex = 0;
-                timeOfAxisSwitch = Time.timeSinceLevelLoad;
             }
             speed = speedTiers[speedTierIndex];
         }

@@ -966,7 +966,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 593de9c5b60486a43a492e8bc0eca54c, type: 2}
+  - {fileID: 2100000, guid: 800b93ea86661be458cd84cd5acebd65, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1392,7 +1392,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7cd167e1cc405b64bab535084fd52289, type: 3}
   m_Name: 
@@ -1406,14 +1406,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8193f50b3c5961d43a76b4bf895cc20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultLookOffset: {x: 0, y: 0, z: 0}
-  defaultPositionOffset: {x: 0, y: 0, z: 0}
-  defaultSpeed: 2
+  defaultLookOffset: {x: 10, y: 0, z: 10}
+  defaultPositionOffset: {x: -10, y: 10, z: -10}
+  defaultSpeed: 0.5
   defaultRotationSpeed: 9
 --- !u!1 &971646934
 GameObject:
@@ -1602,7 +1602,7 @@ MonoBehaviour:
   gravity: {fileID: 11400000, guid: 1061efb9a09c69149a83ba67155a9994, type: 2}
   dodgeAnimation: {fileID: 11400000, guid: a761367ef4b09ac428003ce2b91135e3, type: 2}
   jumpAnimation: {fileID: 11400000, guid: 1348aa4e7d945ed4e9df6733da6737be, type: 2}
-  speedSwitchTime: 0.5
+  speedSwitchTime: 2
   speed: 0
   speedTiers:
   - 2000
@@ -1696,7 +1696,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 593de9c5b60486a43a492e8bc0eca54c, type: 2}
+  - {fileID: 2100000, guid: 800b93ea86661be458cd84cd5acebd65, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
