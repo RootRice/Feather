@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
 
     bool[] ongoingConstraints = new bool[Enum.GetValues(typeof(Constraints.OngoingTag)).Length];
     bool grounded;
+    float timeOfFall;
 
     delegate void ConstraintAction();
     ConstraintAction[] actionConstraint;
@@ -123,6 +124,7 @@ public class PlayerController : MonoBehaviour
                 i--;
             }
         }
+        if (joystickAxis.magnitude == 0) myRigidbody.velocity *= 0.95f;
         myRigidbody.AddForce(gravity.ApplyForce(Time.fixedDeltaTime, grounded || ongoingConstraints[(int)Constraints.OngoingTag.FreezeGrav]));
 
         myRigidbody.AddForce(speed * axis* Time.fixedDeltaTime);
@@ -134,6 +136,7 @@ public class PlayerController : MonoBehaviour
         float cylinderHeight = myCollider.bounds.extents.y - sphereRadius + 0.1f;
         RaycastHit hit;
         if(Physics.SphereCast(myRigidbody.position, sphereRadius, Vector3.down, out hit,cylinderHeight, 2147483647, QueryTriggerInteraction.Ignore))
+        if(Physics.SphereCast(rayOrigin, sphereRadius, Vector3.down, out hit, cylinderHeight, 2147483647, QueryTriggerInteraction.Ignore))
         {
             grounded = true;
             currentControls = controls[currentControls.ChangeControls((int)ControlScheme.ControlType.Grounded)];
@@ -159,6 +162,15 @@ public class PlayerController : MonoBehaviour
             
 
             speed = maxSpeed;
+            Vector3 horizontalMovement = myRigidbody.velocity;
+            horizontalMovement.y = 0;
+            if (Vector3.Angle(horizontalMovement, axis) > 91.0f)
+            {
+                speedTierIndex = 0;
+                timeOfAxisSwitch = Time.timeSinceLevelLoad;
+            }
+            else if (Time.timeSinceLevelLoad - timeOfAxisSwitch > speedSwitchTime && grounded) speedTierIndex = 1;
+            speed = speedTiers[speedTierIndex];
             if (ongoingConstraints[(int)Constraints.OngoingTag.FreezeMovementInput])
             {
                 speed = 0;
