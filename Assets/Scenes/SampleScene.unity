@@ -1413,7 +1413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultLookOffset: {x: 10, y: 0, z: 10}
   defaultPositionOffset: {x: -10, y: 10, z: -10}
-  defaultSpeed: 0.5
+  defaultSpeed: 0.1
   defaultRotationSpeed: 9
 --- !u!1 &971646934
 GameObject:
@@ -1605,7 +1605,7 @@ MonoBehaviour:
   speedSwitchTime: 2
   speed: 0
   speedTiers:
-  - 2000
+  - 2500
   - 4000
   rotSpeed: 5
   body: {fileID: 2388310839261163795}

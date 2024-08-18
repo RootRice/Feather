@@ -58,9 +58,6 @@ public class PlayerController : MonoBehaviour
     Vector3 joystickAxis;
     int groundedHash = Animator.StringToHash("Grounded");
     int horizontalSpeedHash = Animator.StringToHash("HorizontalSpeed");
-    int verticalSpeedHash = Animator.StringToHash("VerticalSpeed");
-    int doubleJumpHash = Animator.StringToHash("DoubleJump");
-    int startMovingHash = Animator.StringToHash("StartMoving");
     int landHash = Animator.StringToHash("Land");
     int fallingTimeHash = Animator.StringToHash("FallingTime");
     int overrideTimeHash = Animator.StringToHash("OverrideTime");
@@ -108,7 +105,7 @@ public class PlayerController : MonoBehaviour
 
     void ApplyBlock()
     {
-        if(blockingState.Progress(Time.deltaTime))
+        if (blockingState.Progress(Time.deltaTime))
         {
             blockingState = new NeutralBlock();
         }
@@ -121,7 +118,7 @@ public class PlayerController : MonoBehaviour
 
     void ResetConstraints()
     {
-        for(int i = 0; i < ongoingConstraints.Length; i++)
+        for (int i = 0; i < ongoingConstraints.Length; i++)
         {
             ongoingConstraints[i] = false;
         }
@@ -129,13 +126,13 @@ public class PlayerController : MonoBehaviour
 
     void ApplyForces()
     {
-        
+
         for (int i = 0; i < playerForces.Count; i++)
         {
             if (!playerForces[i].ShouldTerminate())
             {
                 myRigidbody.AddForce(playerForces[i].ApplyForce(Time.fixedDeltaTime));
-                foreach(Constraints.OngoingTag t in playerForces[i].CheckOngoingConstraints())
+                foreach (Constraints.OngoingTag t in playerForces[i].CheckOngoingConstraints())
                 {
                     ongoingConstraints[(int)t] = true;
                 }
@@ -146,8 +143,37 @@ public class PlayerController : MonoBehaviour
                 i--;
             }
         }
+
         myRigidbody.AddForce(gravity.ApplyForce(Time.fixedDeltaTime, grounded || ongoingConstraints[(int)Constraints.OngoingTag.FreezeGrav]));
-        myRigidbody.AddForce(speed * axis* Time.fixedDeltaTime);
+        ApplyPlayerSpeed();
+    }
+
+    void ApplyPlayerSpeed()
+    {
+        if (joystickAxis.magnitude != 0)
+        {
+            Vector3 horizontalVelocity = myRigidbody.velocity;
+            horizontalVelocity.y = 0;
+            if (Vector3.Angle(horizontalVelocity, axis) > 91.0f || horizontalVelocity.magnitude < 1.0f)
+            {
+                speedTierIndex = 0;
+                timeOfAxisSwitch = Time.timeSinceLevelLoad;
+            }
+            else if (Time.timeSinceLevelLoad - timeOfAxisSwitch > speedSwitchTime && grounded) speedTierIndex = 1;
+            prevAxis = axis;
+            speed = speedTiers[speedTierIndex];
+            if (ongoingConstraints[(int)Constraints.OngoingTag.FreezeMovementInput])
+            {
+                speed = 0;
+                speedTierIndex = 0;
+            }
+        }
+        else
+        {
+            speed = 0;
+            speedTierIndex = 0;
+        }
+        myRigidbody.AddForce(speed * axis * Time.fixedDeltaTime);
     }
 
     // By the time I reach Check forces, all forces have been applied
@@ -199,23 +225,9 @@ public class PlayerController : MonoBehaviour
             axis.z = joystickAxis.z;
             axis = Quaternion.AngleAxis(Camera.main.transform.rotation.eulerAngles.y, Vector3.up) * axis;
             axis = axis.normalized;
-            if (Vector3.Angle(prevAxis, axis) > 91.0f)
-            {
-                speedTierIndex = 0;
-                timeOfAxisSwitch = Time.timeSinceLevelLoad;
-            }
-            else if (Time.timeSinceLevelLoad - timeOfAxisSwitch > speedSwitchTime && grounded) speedTierIndex = 1;
-            prevAxis = axis;
-            if (ongoingConstraints[(int)Constraints.OngoingTag.FreezeMovementInput])
-            {
-                speed = 0;
-            }
-            speed = speedTiers[speedTierIndex];
         }
         else
         {
-            speed = 0;
-            speedTierIndex = 0;
             timeOfAxisSwitch = Time.timeSinceLevelLoad;
         }
 

@@ -243,7 +243,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: HorizontalSpeed
-    m_EventTreshold: 7.3
+    m_EventTreshold: 9.1
   - m_ConditionMode: 1
     m_ConditionEvent: Grounded
     m_EventTreshold: 0
@@ -256,9 +256,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25095445
-  m_TransitionOffset: 3.757183
-  m_ExitTime: 0.73937666
+  m_TransitionDuration: 0.23549736
+  m_TransitionOffset: 3.9658525
+  m_ExitTime: 0.87848955
   m_HasExitTime: 0
   m_HasFixedDuration: 0
   m_InterruptionSource: 0
