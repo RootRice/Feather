@@ -5,10 +5,10 @@ using UnityEngine;
 
 public interface ControlScheme
 {
-    public enum ControlType { Grounded, MidAir };
+    public enum ControlType { Grounded, MidAir, Sprinting };
 
     public abstract Vector3 Move(Vector3 axis);
-    public abstract void Jump(PlayerController player);
+    public abstract void Jump(PlayerController player, ActiveForce.InitParams initParams);
     public abstract void LBlock(PlayerController player);
     public abstract void RBlock(PlayerController player);
     public abstract void Dodge(PlayerController player, ActiveForce.InitParams initParams);

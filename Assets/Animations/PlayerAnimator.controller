@@ -26,7 +26,7 @@ AnimatorStateMachine:
     m_Position: {x: -720, y: 210, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8867261849790224832}
-    m_Position: {x: -20, y: 440, z: 0}
+    m_Position: {x: -20, y: 300, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2067237173654342992}
     m_Position: {x: -20, y: 610, z: 0}
@@ -207,6 +207,34 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1101 &-4981653294970380466
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 3
+    m_ConditionEvent: InputSpeed
+    m_EventTreshold: 0
+  - m_ConditionMode: 3
+    m_ConditionEvent: HorizontalSpeed
+    m_EventTreshold: 20
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -5925318786376655584}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.6875
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1102 &-3862988255134768993
 AnimatorState:
   serializedVersion: 6
@@ -278,15 +306,18 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Grounded
     m_EventTreshold: 0
+  - m_ConditionMode: 4
+    m_ConditionEvent: HorizontalSpeed
+    m_EventTreshold: 30
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2067237173654342992}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.42592588
-  m_TransitionOffset: 0
-  m_ExitTime: 0.49305555
+  m_TransitionDuration: 0.44205502
+  m_TransitionOffset: 1.4208897
+  m_ExitTime: 0.41890672
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -669,6 +700,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: 8920115502313363469}
   - {fileID: -2328399534315988169}
+  - {fileID: -4981653294970380466}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -695,6 +727,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: InputSpeed
     m_EventTreshold: 0
+  - m_ConditionMode: 4
+    m_ConditionEvent: HorizontalSpeed
+    m_EventTreshold: 20
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6697146126131386786}
   m_Solo: 0

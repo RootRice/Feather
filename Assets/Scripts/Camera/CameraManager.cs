@@ -258,11 +258,11 @@ public class FollowCamera : CameraMode
 
         Vector3 horizontalCameraDir = cameraDir;
         horizontalCameraDir.y = 0;
-        Vector3 horizontalPlayerDir = inputData.playerVelocity.normalized;
+        Vector3 horizontalPlayerDir = inputData.playerVelocity;
         horizontalPlayerDir.y = 0;
 
         float fieldOfViewTarget = 60.0f;
-        if (Vector3.Angle(horizontalPlayerDir, horizontalCameraDir) < 46.0f && inputData.playerVelocity.magnitude > 10.0f)
+        if (Vector3.Angle(horizontalPlayerDir, horizontalCameraDir) < 46.0f && horizontalPlayerDir.magnitude > 10.0f)
         {
             fieldOfViewTarget = 55.0f;
         }

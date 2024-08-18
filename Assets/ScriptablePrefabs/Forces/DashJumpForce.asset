@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75fdaf70b86495347b7cda0f26ee2fd2, type: 3}
-  m_Name: DodgeForce
+  m_Name: DashJumpForce
   m_EditorClassIdentifier: 
   xForce:
-  - 13000
-  - 300
-  yForce:
+  - 3000
   - 0
-  - 1500
+  yForce:
+  - -2000
+  - 10000
   zForce:
-  - 13000
-  - 300
+  - 3000
+  - 0
   durations:
-  - 0.5
   - 0.7
   - 0.5
-  ongoingEffects: 00000000010000000200000003000000
-  initialEffects: 0000000001000000
+  - 0.7
+  ongoingEffects: 000000000200000003000000
+  initialEffects: 02000000

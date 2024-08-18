@@ -24,7 +24,7 @@ public class MidAirControls : ControlScheme
         jumpCharge = true;
     }
 
-    public void Jump(PlayerController player)
+    public void Jump(PlayerController player, ActiveForce.InitParams initParams)
     {
         if (jumpCharge)
             return;

@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public ActiveForce dodgeForce;
     [SerializeField] public ActiveForce jumpForce;
     [SerializeField] public ActiveForce doubleJumpForce;
+    [SerializeField] public ActiveForce dashJumpForce;
+    [SerializeField] public ActiveForce dashDodgeForce;
     [SerializeField] ConstForce gravity;
 
     [Header("Transform Animations")]
@@ -27,10 +29,10 @@ public class PlayerController : MonoBehaviour
     Vector3 axis = Vector3.forward;
 
     [Header("Speed Control")]
-    private float timeOfAxisSwitch;
+    private float timeOfRunStart;
     [SerializeField] float speedSwitchTime;
     public float speed;
-    private int speedTierIndex = 0;
+    [HideInInspector] public int speedTierIndex = 0;
     public float[] speedTiers;
     public float rotSpeed;
     float previousSpeed = 0;
@@ -72,6 +74,7 @@ public class PlayerController : MonoBehaviour
         actionConstraint[(int)Constraints.OngoingTag.FreezeMovementInput] = ConstrainMovementInput;
         initialAction[(int)Constraints.InitialTag.ResetForces] = ResetForces;
         initialAction[(int)Constraints.InitialTag.ResetAnimations] = ResetAnimations;
+        initialAction[(int)Constraints.InitialTag.ResetSpeedTier] = ResetSpeedTier;
     }
 
     void Start()
@@ -79,6 +82,7 @@ public class PlayerController : MonoBehaviour
         controls = new ControlScheme[Enum.GetValues(typeof(ControlScheme.ControlType)).Length];
         controls[0] = new GroundControls();
         controls[1] = new MidAirControls();
+        controls[2] = new SprintingControls();
         CreateArr();
         startPos = transform.position;
         myRigidbody = GetComponent<Rigidbody>();
@@ -86,6 +90,7 @@ public class PlayerController : MonoBehaviour
         gravity.Initialise();
         myRenderer = body.GetComponent<MeshRenderer>();
         animationController = GetComponent<Animator>();
+        speedTierIndex = 1;
     }
 
     private void FixedUpdate()
@@ -156,22 +161,28 @@ public class PlayerController : MonoBehaviour
             horizontalVelocity.y = 0;
             if (Vector3.Angle(horizontalVelocity, axis) > 91.0f || horizontalVelocity.magnitude < 1.0f)
             {
-                speedTierIndex = 0;
-                timeOfAxisSwitch = Time.timeSinceLevelLoad;
+                timeOfRunStart = Time.timeSinceLevelLoad;
             }
-            else if (Time.timeSinceLevelLoad - timeOfAxisSwitch > speedSwitchTime && grounded) speedTierIndex = 1;
+            else if (Time.timeSinceLevelLoad - timeOfRunStart > speedSwitchTime && grounded)
+            {
+                if (speedTierIndex < 2)
+                {
+                    SetSpeedTier(2, true);
+                    SetGroundControls();
+                }
+            }
             prevAxis = axis;
             speed = speedTiers[speedTierIndex];
             if (ongoingConstraints[(int)Constraints.OngoingTag.FreezeMovementInput])
             {
                 speed = 0;
-                speedTierIndex = 0;
             }
         }
         else
         {
             speed = 0;
-            speedTierIndex = 0;
+            SetSpeedTier(1, false);
+            SetGroundControls();
         }
         myRigidbody.AddForce(speed * axis * Time.fixedDeltaTime);
     }
@@ -201,7 +212,6 @@ public class PlayerController : MonoBehaviour
         {
             if (!grounded) HitGroundEffects();
             grounded = true;
-            currentControls = controls[currentControls.ChangeControls((int)ControlScheme.ControlType.Grounded)];
             timeOfFall = Time.timeSinceLevelLoad;
             return grounded;
         }
@@ -213,6 +223,8 @@ public class PlayerController : MonoBehaviour
     void HitGroundEffects()
     {
         if (Time.timeSinceLevelLoad - timeOfFall > landAnimFallTime && joystickAxis.magnitude == 0.0f) PlayAnimation(landHash, 0.5f);
+        SetSpeedTier(1, true);
+        SetGroundControls();
     }
 
     void Controls()
@@ -228,7 +240,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            timeOfAxisSwitch = Time.timeSinceLevelLoad;
+            timeOfRunStart = Time.timeSinceLevelLoad;
         }
 
         if (Input.GetKeyDown(KeyCode.Period) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeBlockInput])
@@ -245,7 +257,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space) && !ongoingConstraints[(int)Constraints.OngoingTag.FreezeJumpInput])
         {
-            currentControls.Jump(this);
+            currentControls.Jump(this, new ActiveForce.InitParams(axis.x, axis.magnitude, axis.z, axis.magnitude));
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -369,4 +381,39 @@ public class PlayerController : MonoBehaviour
         animations.Clear();
     }
 
+    void ResetSpeedTier()
+    {
+        SetSpeedTier(1, true);
+    }
+
+    void ResetRunStartTime()
+    {
+        timeOfRunStart = Time.timeSinceLevelLoad;
+    }
+
+    public void SetSpeedTier(int newTier, bool increase)
+    {
+        if (increase == true) speedTierIndex = Math.Max(newTier, speedTierIndex);
+        else
+        {
+            speedTierIndex = Math.Min(newTier, speedTierIndex);
+            timeOfRunStart = Time.timeSinceLevelLoad;
+        }
+    }
+
+    void SetGroundControls()
+    {
+        switch (speedTierIndex)
+        {
+            case 0:
+                currentControls = controls[currentControls.ChangeControls((int)ControlScheme.ControlType.Grounded)];
+                break;
+            case 1:
+                currentControls = controls[currentControls.ChangeControls((int)ControlScheme.ControlType.Grounded)];
+                break;
+            case 2:
+                currentControls = controls[currentControls.ChangeControls((int)ControlScheme.ControlType.Sprinting)];
+                break;
+        }
+    }
 }
