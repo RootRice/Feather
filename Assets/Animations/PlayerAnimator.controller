@@ -137,7 +137,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Double Jump
-  m_Speed: 0.8
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -149,7 +149,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7801832912990185087, guid: ada1f7ad73f09b649aec6fb6735b1822, type: 3}
+  m_Motion: {fileID: 9141372648635798886, guid: ada1f7ad73f09b649aec6fb6735b1822, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -163,7 +163,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Air Dash
-  m_Speed: 0.8
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -175,7 +175,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7801832912990185087, guid: ada1f7ad73f09b649aec6fb6735b1822, type: 3}
+  m_Motion: {fileID: 9141372648635798886, guid: ada1f7ad73f09b649aec6fb6735b1822, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
