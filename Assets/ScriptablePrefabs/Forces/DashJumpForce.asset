@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: DashJumpForce
   m_EditorClassIdentifier: 
   xForce:
-  - 3000
-  - 0
+  - 5000
+  - -5000
   yForce:
   - -2000
   - 10000
   zForce:
-  - 3000
-  - 0
+  - 5000
+  - -5000
   durations:
-  - 0.7
+  - 0.8
   - 0.5
-  - 0.7
+  - 0.8
   ongoingEffects: 000000000200000003000000
   initialEffects: 02000000

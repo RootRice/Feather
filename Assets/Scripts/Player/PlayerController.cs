@@ -211,10 +211,10 @@ public class PlayerController : MonoBehaviour
         if(Physics.SphereCast(rayOrigin, sphereRadius, Vector3.down, out hit,cylinderHeight, 2147483647, QueryTriggerInteraction.Ignore))
         {
             if (!grounded) HitGroundEffects();
-            grounded = true;
             timeOfFall = Time.timeSinceLevelLoad;
             return grounded;
         }
+        Debug.Log(grounded + " " + Time.timeSinceLevelLoad);
         grounded = false;
         currentControls = controls[currentControls.ChangeControls((int)ControlScheme.ControlType.MidAir)];
         return grounded;
@@ -223,6 +223,7 @@ public class PlayerController : MonoBehaviour
     void HitGroundEffects()
     {
         if (Time.timeSinceLevelLoad - timeOfFall > landAnimFallTime && joystickAxis.magnitude == 0.0f) PlayAnimation(landHash, 0.5f);
+        grounded = true;
         SetSpeedTier(1, true);
         SetGroundControls();
     }
@@ -403,6 +404,7 @@ public class PlayerController : MonoBehaviour
 
     void SetGroundControls()
     {
+        if (grounded == false) return;
         switch (speedTierIndex)
         {
             case 0:

@@ -12,7 +12,6 @@ public class MidAirControls : ControlScheme
     int jumpHash = Animator.StringToHash("Jump");
     int doubleJumpHash = Animator.StringToHash("Double Jump");
     int startMovingHash = Animator.StringToHash("StartMoving");
-    int fallHash = Animator.StringToHash("Fall");
 
     public void Dodge(PlayerController player, ActiveForce.InitParams initParams)
     {
@@ -30,7 +29,7 @@ public class MidAirControls : ControlScheme
             return;
         player.AddTransformAnimation(player.jumpAnimation);
         player.PlayAnimation(doubleJumpHash, 1.0f);
-        player.AddActiveForce(player.jumpForce);
+        player.AddActiveForce(player.doubleJumpForce);
         jumpCharge = true;
     }
 

@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: JumpForce
   m_EditorClassIdentifier: 
   xForce:
-  - 0
+  - 2500
   - 0
   yForce:
-  - 25000
-  - -300
+  - -1000
+  - 7000
   zForce:
-  - 0
+  - 2500
   - 0
   durations:
-  - 0
-  - 0.175
+  - 0.5
+  - 0.3
   - 0.5
   ongoingEffects: 00000000
   initialEffects: 00000000

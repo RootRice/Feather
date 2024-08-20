@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xForce:
   - 13000
-  - 300
+  - 4000
   yForce:
-  - 0
-  - 1500
+  - 3000
+  - -3000
   zForce:
   - 13000
-  - 300
+  - 4000
   durations:
   - 0.5
   - 0.7
