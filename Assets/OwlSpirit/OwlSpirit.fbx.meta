@@ -94,7 +94,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.19672132
+        functionName: FootstepEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 0ade8bb8d94ee934c9fa991b9a2bde07, type: 3}
+        floatParameter: 0
+        intParameter: 2
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -104,7 +111,7 @@ ModelImporter:
       takeName: root|DodgeSpin
       internalID: 0
       firstFrame: 0
-      lastFrame: 48
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -162,7 +169,7 @@ ModelImporter:
       takeName: root|Jump
       internalID: 0
       firstFrame: 0
-      lastFrame: 12
+      lastFrame: 90
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -191,7 +198,7 @@ ModelImporter:
       takeName: root|Jump.Local
       internalID: 0
       firstFrame: 0
-      lastFrame: 24
+      lastFrame: 114
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -210,7 +217,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.04210526
+        functionName: FootstepEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 0ade8bb8d94ee934c9fa991b9a2bde07, type: 3}
+        floatParameter: 0
+        intParameter: 3
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -268,7 +282,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.022653723
+        functionName: FootstepEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 0ade8bb8d94ee934c9fa991b9a2bde07, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.5307443
+        functionName: FootstepEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 0ade8bb8d94ee934c9fa991b9a2bde07, type: 3}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -335,8 +363,8 @@ ModelImporter:
       name: root|Fall.Local
       takeName: root|Jump.Local
       internalID: 0
-      firstFrame: 24
-      lastFrame: 70
+      firstFrame: 23
+      lastFrame: 114
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -364,8 +392,8 @@ ModelImporter:
       name: root|Land.Local
       takeName: root|Jump.Local
       internalID: 0
-      firstFrame: 72
-      lastFrame: 96
+      firstFrame: 114
+      lastFrame: 162
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
