@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class FootStepComponent : MonoBehaviour
 {
-	public ParticleSystem LeftFootParticles;
-	public ParticleSystem RightFootParticles;
-	public ParticleSystem DashParticles;
-	public ParticleSystem JumpParticles;
-	public ParticleSystem AirDashParticles;
-	public ParticleSystem DoubleJumpParticles;
-	public ParticleSystem LandParticles;
+	public VisualEffect LeftFootParticles;
+	public VisualEffect RightFootParticles;
+    public VisualEffect DashParticles;
+	public VisualEffect JumpParticles;
+	public VisualEffect AirDashParticles;
+    public VisualEffect DoubleJumpParticles;
+	public VisualEffect LandParticles;
     void FootstepEvent(int whichfoot)
     {
         Debug.Log("Foot step: " + whichfoot);
