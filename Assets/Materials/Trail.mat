@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AirRing_M
-  m_Shader: {fileID: -6465566751694194690, guid: 754125285a3005a498fd964d522dc34b, type: 3}
+  m_Name: Trail
+  m_Shader: {fileID: -6465566751694194690, guid: f90ab45716275964587a39f40ccb04fe, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
@@ -19,12 +19,12 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
+    - Texture2D_d6fcb065791e4599ba90151a7ace78fb:
+        m_Texture: {fileID: 2800000, guid: a6bc56a2467f21f4e91f8fc2493ab78c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 090e063a44c078f48b921664f09c55c3, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -48,7 +48,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 090e063a44c078f48b921664f09c55c3, type: 3}
+        m_Texture: {fileID: 2800000, guid: 24d145d7245d0cc41bc2b325c190ec2b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -61,14 +61,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_e054125903f34dd2a2bbffba61074ff4_Texture_1:
-        m_Texture: {fileID: 2800000, guid: a6bc56a2467f21f4e91f8fc2493ab78c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_fa32105a354b4fd6bd67d6e9fb103e30_Texture_1:
-        m_Texture: {fileID: 2800000, guid: a6bc56a2467f21f4e91f8fc2493ab78c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -85,7 +77,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - PixelSnap: 0
+    - Vector1_07896623953140a4b4776e1fac97679c: 1.07
+    - Vector1_240bbaf736474f09b5bf06c142d8da53: 0.05
+    - Vector1_3ceb4a75ecfa478a8eaee0c7b66681ba: 1.66
+    - Vector1_73122924cefa488bacfb1b2a383f7fd5: 1.65
+    - Vector1_8673aba52c68436db7ae0ebde3c0297c: 0.21
+    - Vector1_cbb710b09bf840a89610e2a129fa3ae9: 0.9
+    - Vector1_d842a3a6ddc74baba9dfc4d107f6be7e: -0.06
+    - Vector1_e665d2deefe7413b81f6a327559466c4: 1
+    - Vector1_eb76837fd83e4b109b87dfec88919cb7: 2.18
     - _AlphaClip: 0
     - _Blend: 0
     - _BlendOp: 0
@@ -93,9 +93,9 @@ Material:
     - _CameraFadingEnabled: 0
     - _CameraFarFadeDistance: 2
     - _CameraNearFadeDistance: 1
-    - _ColorMode: 4
+    - _ColorMode: 0
     - _Cull: 0
-    - _Cutoff: 0.008
+    - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DistortionBlend: 0.5
     - _DistortionEnabled: 0
@@ -103,15 +103,14 @@ Material:
     - _DistortionStrengthScaled: 0
     - _DstBlend: 10
     - _EmissionEnabled: 0
-    - _EnableExternalAlpha: 0
     - _FlipbookBlending: 0
     - _FlipbookMode: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 0
     - _GlossyReflections: 1
     - _LightingEnabled: 0
     - _Metallic: 0
-    - _Mode: 4
+    - _Mode: 2
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _QueueControl: 0
@@ -126,17 +125,18 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
+    - Color_11dc388c007b43669f24e6deb96c1985: {r: 0, g: 0, b: 0, a: 0}
+    - Color_23b64667c1814683a44d235263645f98: {r: 0.0017463235, g: 0.0060355393, b: 0.007230392, a: 0}
+    - Color_66ab2328058b4881b153a615081091fe: {r: 13.762645, g: 18.634933, b: 21.61245, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 7.999999, g: 7.999999, b: 7.999999, a: 1}
-    - _ColorAddSubDiff: {r: -1, g: 0, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
-    - _noise_speed: {r: -0.53, g: 0, b: 0, a: 0}
-    - _tex_speed: {r: 0.27, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &908112162601868317
+--- !u!114 &6073955031691605279
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

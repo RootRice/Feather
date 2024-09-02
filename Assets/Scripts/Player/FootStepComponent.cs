@@ -8,8 +8,10 @@ public class FootStepComponent : MonoBehaviour
 	public VisualEffect LeftFootParticles;
 	public VisualEffect RightFootParticles;
     public VisualEffect DashParticles;
+    public ParticleSystem DashPS;
 	public VisualEffect JumpParticles;
 	public VisualEffect AirDashParticles;
+    public ParticleSystem AirDashPS;
     public VisualEffect DoubleJumpParticles;
 	public VisualEffect LandParticles;
     void FootstepEvent(int whichfoot)
@@ -25,12 +27,14 @@ public class FootStepComponent : MonoBehaviour
                 break;
             case 2:
                 DashParticles.Play();
+                DashPS.Play();
                 break;
             case 3:
                 JumpParticles.Play();
                 break;
             case 4:
                 AirDashParticles.Play();
+                AirDashPS.Play();
                 break;
             case 5:
                 DoubleJumpParticles.Play();
